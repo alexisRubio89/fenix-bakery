@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Mensajes | Admin Fenix Bakery</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/css/admin.css}"/>
+</head>
+<body class="admin-body">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+    <div class="sidebar-brand"><img src="/img/logo.png" style="width:34px;height:34px;border-radius:50%;object-fit:cover;"> <span>El Fénix Bakery</span></div>
+    <nav class="sidebar-nav">
+        <a th:href="@{/admin/dashboard}" class="nav-item"><span class="nav-icon">📊</span> Dashboard</a>
+        <a th:href="@{/admin/menu}" class="nav-item"><span class="nav-icon">🍽️</span> Menú</a>
+        <a th:href="@{/admin/cakes}" class="nav-item"><span class="nav-icon">🎂</span> Cakes</a>
+        <a th:href="@{/admin/fiestas}" class="nav-item"><span class="nav-icon">🎉</span> Fiestas</a>
+        <a th:href="@{/admin/inventario}" class="nav-item"><span class="nav-icon">📦</span> Inventario</a>
+        <a th:href="@{/admin/mensajes}" class="nav-item active">
+            <span class="nav-icon">✉️</span> Mensajes
+            <span th:if="${sidebarNoLeidos > 0}" class="nav-badge" th:text="${sidebarNoLeidos}">0</span>
+        </a>
+        <a th:href="@{/}" class="nav-item"><span class="nav-icon">🌐</span> Ver sitio</a>
+    </nav>
+    <div class="sidebar-footer">
+        <span sec:authentication="name">Usuario</span>
+        <form th:action="@{/logout}" method="post" style="display:inline">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            <button type="submit" class="logout-btn">Salir</button>
+        </form>
+    </div>
+</aside>
+
+<main class="admin-main">
+    <div class="admin-header">
+        <div>
+            <h1>Mensajes de Contacto</h1>
+            <p>Mensajes recibidos desde el formulario del sitio</p>
+        </div>
+    </div>
+
+    <!-- MENSAJES FLASH -->
+    <div th:if="${mensaje}" class="alert"
+         th:classappend="${tipoMensaje == 'success'} ? 'alert-success' : (${tipoMensaje == 'error'} ? 'alert-danger' : 'alert-warning')"
+         th:text="${mensaje}"></div>
+
+    <!-- VACÍO -->
+    <div th:if="${#lists.isEmpty(mensajes)}" class="dash-panel">
+        <div class="empty-state">No hay mensajes todavía.</div>
+    </div>
+
+    <!-- CSRF para JS -->
+    <div th:unless="${#lists.isEmpty(mensajes)}"
+         id="csrfData"
+         th:attr="data-param=${_csrf.parameterName}, data-token=${_csrf.token}"
+         style="display:none"></div>
+
+    <div th:unless="${#lists.isEmpty(mensajes)}">
+
+        <!-- BARRA DE ACCIONES EN LOTE -->
+        <div class="bulk-bar">
+            <label class="bulk-master">
+                <input type="checkbox" id="masterCheck"/>
+                <span>Seleccionar todos</span>
+            </label>
+            <span class="bulk-count" id="bulkCount">0 seleccionados</span>
+            <div class="bulk-actions">
+                <button type="button" class="btn-sm" id="btnMarcarLeidos" disabled>Marcar leídos</button>
+                <button type="button" class="btn-sm danger" id="btnEliminarSel" disabled>Eliminar seleccionados</button>
+                <button type="button" class="btn-sm danger" id="btnEliminarTodos">Eliminar todos</button>
+            </div>
+        </div>
+
+        <!-- LISTA DE MENSAJES (acordeón) -->
+        <div class="mensajes-list">
+            <div th:each="m : ${mensajes}" class="mensaje-card" th:classappend="${!m.leido} ? 'no-leido'"
+                 th:attr="data-id=${m.id}, data-leido=${m.leido}">
+
+                <!-- CABECERA (siempre visible, clic para expandir) -->
+                <div class="mensaje-row">
+                    <label class="mensaje-check" onclick="event.stopPropagation()">
+                        <input type="checkbox" class="rowCheck" th:value="${m.id}"/>
+                    </label>
+                    <div class="mensaje-summary" onclick="toggleMensaje(this)">
+                        <span class="dot" th:classappend="${m.leido} ? 'dot-read'"></span>
+                        <span class="mensaje-nombre" th:text="${m.nombre}">Nombre</span>
+                        <span class="mensaje-asunto-prev" th:text="${m.asunto}">Asunto</span>
+                        <span class="mensaje-preview" th:text="${m.mensaje}">preview...</span>
+                        <span class="mensaje-fecha" th:text="${#temporals.format(m.fecha, 'dd/MM/yyyy HH:mm')}">fecha</span>
+                        <span class="chevron">&#9662;</span>
+                    </div>
+                </div>
+
+                <!-- CUERPO (colapsado por defecto) -->
+                <div class="mensaje-body">
+                    <div class="mensaje-meta">
+                        <span><strong>Asunto:</strong> <span th:text="${m.asunto}"></span></span>
+                        <span><strong>Email:</strong> <a th:href="'mailto:' + ${m.email}" th:text="${m.email}" class="mensaje-link"></a></span>
+                        <span th:if="${m.telefono != null and !m.telefono.isBlank()}"><strong>Tel:</strong> <span th:text="${m.telefono}"></span></span>
+                    </div>
+                    <div class="mensaje-cuerpo" th:text="${m.mensaje}">Mensaje...</div>
+                    <div class="mensaje-acciones">
+                        <a th:href="'mailto:' + ${m.email}" class="btn-sm">Responder</a>
+                        <button type="button" class="btn-sm danger"
+                                th:attr="data-id=${m.id}" onclick="confirmarEliminarUno(this)">Eliminar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- FORMULARIOS OCULTOS para acciones en lote -->
+<form id="formLeidos" th:action="@{/admin/mensajes/leidos-lote}" method="post" style="display:none">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+    <div id="leidosIds"></div>
+</form>
+<form id="formEliminarSel" th:action="@{/admin/mensajes/eliminar-lote}" method="post" style="display:none">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+    <div id="eliminarIds"></div>
+</form>
+<form id="formEliminarTodos" th:action="@{/admin/mensajes/eliminar-todos}" method="post" style="display:none">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+</form>
+<form id="formEliminarUno" th:action="@{/admin/mensajes/eliminar/0}" method="post" style="display:none">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+</form>
+
+<!-- MODAL DE CONFIRMACIÓN -->
+<div class="modal-overlay" id="modalConfirm">
+    <div class="modal-box">
+        <div class="modal-icon">&#9888;</div>
+        <h3 class="modal-title" id="modalTitle">¿Eliminar mensaje?</h3>
+        <p class="modal-text" id="modalText">Esta acción no se puede deshacer.</p>
+        <div class="modal-actions">
+            <button type="button" class="btn btn-outline" id="modalCancel">Cancelar</button>
+            <button type="button" class="btn btn-danger" id="modalConfirmBtn">Eliminar</button>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/js/admin.js}"></script>
+<script>
+function toggleMensaje(summaryEl) {
+    var card = summaryEl.closest('.mensaje-card');
+    var yaAbierto = card.classList.contains('expanded');
+    document.querySelectorAll('.mensaje-card.expanded').forEach(function(c) {
+        c.classList.remove('expanded');
+    });
+    if (!yaAbierto) {
+        card.classList.add('expanded');
+        if (card.dataset.leido === 'false') {
+            marcarLeidoAjax(card);
+        }
+    }
+}
+
+function marcarLeidoAjax(card) {
+    var id = card.dataset.id;
+    var csrf = document.getElementById('csrfData');
+    fetch('/admin/mensajes/leido-ajax/' + id, {
+        method: 'POST',
+        headers: { 'X-CSRF-TOKEN': csrf.dataset.token }
+    }).then(function(r){ return r.json(); }).then(function(data){
+        card.dataset.leido = 'true';
+        card.classList.remove('no-leido');
+        var dot = card.querySelector('.dot');
+        if (dot) dot.classList.add('dot-read');
+        var badge = document.querySelector('.nav-item.active .nav-badge');
+        if (data.noLeidos > 0) {
+            if (badge) badge.textContent = data.noLeidos;
+        } else if (badge) {
+            badge.remove();
+        }
+    }).catch(function(){});
+}
+
+var master = document.getElementById('masterCheck');
+var rowChecks = function() { return Array.prototype.slice.call(document.querySelectorAll('.rowCheck')); };
+
+function seleccionados() {
+    return rowChecks().filter(function(c){ return c.checked; }).map(function(c){ return c.value; });
+}
+
+function actualizarBulk() {
+    var sel = seleccionados();
+    document.getElementById('bulkCount').textContent = sel.length + ' seleccionados';
+    document.getElementById('btnMarcarLeidos').disabled = sel.length === 0;
+    document.getElementById('btnEliminarSel').disabled = sel.length === 0;
+    var todos = rowChecks();
+    master.checked = sel.length > 0 && sel.length === todos.length;
+    master.indeterminate = sel.length > 0 && sel.length < todos.length;
+}
+
+if (master) {
+    master.addEventListener('change', function() {
+        rowChecks().forEach(function(c){ c.checked = master.checked; });
+        actualizarBulk();
+    });
+}
+rowChecks().forEach(function(c){
+    c.addEventListener('change', actualizarBulk);
+});
+
+document.getElementById('btnMarcarLeidos').addEventListener('click', function() {
+    var sel = seleccionados();
+    if (sel.length === 0) return;
+    var cont = document.getElementById('leidosIds');
+    cont.innerHTML = '';
+    sel.forEach(function(id){
+        var inp = document.createElement('input');
+        inp.type = 'hidden'; inp.name = 'ids'; inp.value = id;
+        cont.appendChild(inp);
+    });
+    document.getElementById('formLeidos').submit();
+});
+
+document.getElementById('btnEliminarSel').addEventListener('click', function() {
+    var sel = seleccionados();
+    if (sel.length === 0) return;
+    abrirModal('¿Eliminar ' + sel.length + ' mensaje(s)?',
+        'Esta acción no se puede deshacer.',
+        function() {
+            var cont = document.getElementById('eliminarIds');
+            cont.innerHTML = '';
+            sel.forEach(function(id){
+                var inp = document.createElement('input');
+                inp.type = 'hidden'; inp.name = 'ids'; inp.value = id;
+                cont.appendChild(inp);
+            });
+            document.getElementById('formEliminarSel').submit();
+        });
+});
+
+document.getElementById('btnEliminarTodos').addEventListener('click', function() {
+    abrirModal('¿Eliminar TODOS los mensajes?',
+        'Se borrarán todos los mensajes de forma permanente. Esta acción no se puede deshacer.',
+        function() {
+            document.getElementById('formEliminarTodos').submit();
+        });
+});
+
+function confirmarEliminarUno(btn) {
+    var id = btn.dataset.id;
+    abrirModal('¿Eliminar este mensaje?',
+        'Esta acción no se puede deshacer.',
+        function() {
+            var form = document.getElementById('formEliminarUno');
+            form.action = '/admin/mensajes/eliminar/' + id;
+            form.submit();
+        });
+}
+
+var modal = document.getElementById('modalConfirm');
+var modalAccion = null;
+
+function abrirModal(titulo, texto, accion) {
+    document.getElementById('modalTitle').textContent = titulo;
+    document.getElementById('modalText').textContent = texto;
+    modalAccion = accion;
+    modal.classList.add('show');
+}
+function cerrarModal() {
+    modal.classList.remove('show');
+    modalAccion = null;
+}
+document.getElementById('modalCancel').addEventListener('click', cerrarModal);
+document.getElementById('modalConfirmBtn').addEventListener('click', function() {
+    if (modalAccion) modalAccion();
+});
+modal.addEventListener('click', function(e) {
+    if (e.target === modal) cerrarModal();
+});
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && modal.classList.contains('show')) cerrarModal();
+});
+
+actualizarBulk();
+</script>
+</body>
+</html>

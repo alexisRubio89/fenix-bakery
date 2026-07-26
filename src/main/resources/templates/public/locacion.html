@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{public/layout :: ~{::body/*}}">
+<body>
+<nav></nav>
+<main th:fragment="content">
+
+    <section class="page-hero">
+        <p class="page-hero-eyebrow" th:text="#{loc.hero.eyebrow}">El Fénix Bakery</p>
+        <h1 th:text="${locacion}">Locación</h1>
+        <p th:text="#{loc.hero.subtitle}">Dulcería &amp; Panadería Cubana — New Jersey</p>
+    </section>
+
+    <section class="section locacion-bg reveal">
+        <div class="section-container">
+            <div class="locacion-grid">
+                <div class="locacion-foto reveal-item">
+                    <div class="loc-img-wrap">
+                        <img th:src="${heroImg}" th:alt="${locacion}"/>
+                    </div>
+                </div>
+                <div class="locacion-info reveal-item">
+                    <p class="section-eyebrow" th:text="#{loc.info.eyebrow}">Información</p>
+                    <h2 class="section-title" style="font-size:2.2rem;margin-bottom:2rem" th:text="${locacion}">Locación</h2>
+
+                    <div class="loc-detail">
+                        <span class="loc-icon">📍</span>
+                        <div>
+                            <strong th:text="#{loc.address}">Dirección</strong>
+                            <p th:text="${direccion}"></p>
+                            <a class="btn-directions"
+                               th:href="'https://www.google.com/maps/dir/?api=1&destination=' + ${#uris.escapeQueryParam(mapsQuery)}"
+                               target="_blank" rel="noopener"
+                               th:text="#{loc.directions}">Cómo llegar</a>
+                        </div>
+                    </div>
+                    <div class="loc-detail">
+                        <span class="loc-icon">🕐</span>
+                        <div>
+                            <strong th:text="#{loc.schedule}">Horario</strong>
+                            <p th:if="${#locale.language == 'es'}" th:text="${horario1}"></p>
+                            <p th:if="${#locale.language == 'es' and horario2 != null}" th:text="${horario2}"></p>
+                            <p th:if="${#locale.language == 'en'}" th:text="${horario1En}"></p>
+                            <p th:if="${#locale.language == 'en' and horario2En != null}" th:text="${horario2En}"></p>
+                        </div>
+                    </div>
+                    <div class="loc-detail">
+                        <span class="loc-icon">📞</span>
+                        <div>
+                            <strong th:text="#{loc.phone}">Teléfono</strong>
+                            <p><a th:href="'tel:' + ${telefonoRaw}" class="tel-link" th:text="${telefono}"></a></p>
+                        </div>
+                    </div>
+
+                    <div class="delivery-section">
+                        <strong class="delivery-title" th:text="#{loc.orderOnline}">Pide en línea</strong>
+                        <div class="delivery-buttons">
+                            <a th:href="${grubhub}" target="_blank" rel="noopener" class="btn-delivery grubhub">
+                                <img src="/img/icon-grubhub.svg" class="delivery-icon" alt="GrubHub"/>GrubHub
+                            </a>
+                            <a th:href="${ubereats}" target="_blank" rel="noopener" class="btn-delivery ubereats">
+                                <img src="/img/icon-ubereats.svg" class="delivery-icon" alt="Uber Eats"/>Uber Eats
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="otras-locaciones reveal">
+                <p class="section-eyebrow" th:text="#{loc.alsoAt.eyebrow}">También estamos en</p>
+                <div class="otras-grid">
+                    <a th:href="@{/locaciones/north-bergen}" class="otra-card reveal-item"
+                       th:if="${locacion != 'North Bergen'}">
+                        <div class="otra-img-wrap"><img src="/img/loc-north-bergen.jpg" alt="North Bergen"/></div>
+                        <div class="otra-info"><h4 th:text="#{loc.northBergen}">North Bergen</h4><p>8133 Bergenline Ave, NJ 07047</p></div>
+                    </a>
+                    <a th:href="@{/locaciones/west-new-york}" class="otra-card reveal-item"
+                       th:if="${locacion != 'West New York'}">
+                        <div class="otra-img-wrap"><img src="/img/loc-west-new-york.png" alt="West New York"/></div>
+                        <div class="otra-info"><h4 th:text="#{loc.westNewYork}">West New York</h4><p>6132 Bergenline Ave, NJ 07093</p></div>
+                    </a>
+                    <a th:href="@{/locaciones/union-city}" class="otra-card reveal-item"
+                       th:if="${locacion != 'Union City'}">
+                        <div class="otra-img-wrap"><img src="/img/loc-union-city.jpg" alt="Union City"/></div>
+                        <div class="otra-info"><h4 th:text="#{loc.unionCity}">Union City</h4><p>4211 Bergenline Ave, NJ 07087</p></div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<footer></footer>
+</body>
+</html>

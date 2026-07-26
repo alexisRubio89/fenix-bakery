@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{public/layout :: ~{::body/*}}">
+<body>
+<nav></nav>
+<main th:fragment="content">
+
+    <section class="page-hero">
+        <p class="page-hero-eyebrow">Fenix Bakery</p>
+        <h1 th:text="${#locale.language == 'en'} ? 'Our Menu' : 'Nuestro Menú'">Nuestro Menú</h1>
+        <p th:text="${#locale.language == 'en'} ? 'Cuban bakery &amp; pastry — everything handmade daily' : 'Panadería y dulcería cubana — todo hecho a mano cada día'">Panadería y dulcería cubana</p>
+    </section>
+
+    <section class="section menu-bg">
+        <div class="section-container">
+
+            <!-- CONTROLES -->
+            <div class="menu-controls">
+                <div class="menu-filters">
+                    <label class="menu-filter-label" th:text="${#locale.language == 'en'} ? 'Category' : 'Categoría'">Categoría</label>
+                    <select id="catSelect" class="menu-cat-select" onchange="filterByCat(this.value)">
+                        <option value="all" th:text="${#locale.language == 'en'} ? 'All categories' : 'Todas las categorías'">Todas</option>
+                        <option value="sandwiches">Sandwiches</option>
+                        <option value="appetizer" th:text="${#locale.language == 'en'} ? 'Appetizers' : 'Aperitivos'">Aperitivos</option>
+                        <option value="batidos" th:text="${#locale.language == 'en'} ? 'Shakes' : 'Batidos'">Batidos</option>
+                        <option value="pasteles" th:text="${#locale.language == 'en'} ? 'Pastries' : 'Pasteles'">Pasteles</option>
+                        <option value="postres-cubanos" th:text="${#locale.language == 'en'} ? 'Cuban Desserts' : 'Postres Cubanos'">Postres Cubanos</option>
+                        <option value="jugos" th:text="${#locale.language == 'en'} ? 'Juices' : 'Jugos'">Jugos</option>
+                        <option value="cafes" th:text="${#locale.language == 'en'} ? 'Coffees' : 'Cafés'">Cafés</option>
+                        <option value="bebidas" th:text="${#locale.language == 'en'} ? 'Drinks' : 'Bebidas'">Bebidas</option>
+                        <option value="pernil-asado" th:text="${#locale.language == 'en'} ? 'Roast Pork' : 'Pernil Asado'">Pernil Asado</option>
+                    </select>
+                </div>
+                <div class="menu-sort">
+                    <label th:text="${#locale.language == 'en'} ? 'Sort by' : 'Ordenar por'">Ordenar por</label>
+                    <select id="sortSelect" onchange="sortMenu(this.value)">
+                        <option value="recommended" th:text="${#locale.language == 'en'} ? 'Recommended' : 'Recomendados'">Recomendados</option>
+                        <option value="popular" th:text="${#locale.language == 'en'} ? 'Most Popular' : 'Más pedidos'">Más pedidos</option>
+                        <option value="price-high" th:text="${#locale.language == 'en'} ? 'Price: High to Low' : 'Precio: Mayor a menor'">Precio: Mayor a menor</option>
+                        <option value="price-low" th:text="${#locale.language == 'en'} ? 'Price: Low to High' : 'Precio: Menor a mayor'">Precio: Menor a mayor</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- GRID -->
+            <div class="menu-product-grid" id="menuGrid">
+                <a th:each="p : ${productos}"
+                   th:href="@{/menu/{slug}(slug=${p.slug})}"
+                   class="menu-product-card"
+                   th:attr="data-cat=${p.catSlug}, data-name=${p.nombre}, data-popular=${p.popular}">
+                    <div class="mpc-img">
+                        <video th:if="${p.tieneVideo}" th:src="${p.video}" autoplay loop muted playsinline
+                               th:poster="${p.imagen}" class="mpc-video"></video>
+                        <img th:unless="${p.tieneVideo}" th:src="${p.imagen}" th:alt="${p.nombre}" onerror="this.onerror=null;this.src='/img/menu-placeholder.jpg'"/>
+                        <span class="mpc-badge" th:if="${p.popular}">Popular</span>
+                    </div>
+                    <div class="mpc-info">
+                        <h4 th:text="${#locale.language == 'en'} ? ${p.nombreEn} : ${p.nombre}">Producto</h4>
+                        <p th:text="${#locale.language == 'en'} ? ${p.descripcionEn} : ${p.descripcion}">Descripción</p>
+                        <div class="mpc-footer">
+                            <span class="mpc-price" th:text="${p.precio}">$0.00</span>
+                            <span class="mpc-cat" th:text="${#locale.language == 'en'} ? ${p.categoriaEn} : ${p.categoria}">Cat</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="menu-empty" id="menuEmpty" style="display:none">
+                <p th:text="#{menu.empty}">No hay productos en esta categoría.</p>
+            </div>
+
+
+        </div>
+    </section>
+</main>
+<footer></footer>
+</body>
+</html>

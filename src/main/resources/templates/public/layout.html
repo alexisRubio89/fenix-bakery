@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- SEO básico -->
+    <title th:text="${metaTitle != null ? metaTitle : 'Fenix Bakery — Dulcería &amp; Panadería Cubana en New Jersey'}">Fenix Bakery</title>
+    <meta name="description" th:content="${metaDescription != null ? metaDescription : 'Auténtica panadería y dulcería cubana en New Jersey. Pan cubano, pasteles, croquetas, cakes y postres tradicionales en North Bergen, West New York y Union City.'}"/>
+    <meta name="keywords" th:content="${metaKeywords != null ? metaKeywords : 'panadería cubana, Cuban bakery, New Jersey, North Bergen, West New York, Union City, pan cubano, pasteles, cakes, croquetas'}"/>
+    <meta name="robots" content="index, follow"/>
+    <meta name="author" content="Fenix Bakery"/>
+    <link rel="canonical" th:href="${canonicalUrl != null ? canonicalUrl : 'https://www.fenixbakery.com'}"/>
+
+    <!-- Open Graph (redes sociales) -->
+    <meta property="og:type" content="website"/>
+    <meta property="og:site_name" content="Fenix Bakery"/>
+    <meta property="og:title" th:content="${metaTitle != null ? metaTitle : 'Fenix Bakery — Dulcería &amp; Panadería Cubana'}"/>
+    <meta property="og:description" th:content="${metaDescription != null ? metaDescription : 'Auténtica panadería y dulcería cubana en New Jersey.'}"/>
+    <meta property="og:image" th:content="@{/img/logo.png}"/>
+    <meta property="og:locale" th:content="${#locale.language == 'en'} ? 'en_US' : 'es_US'"/>
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:title" th:content="${metaTitle != null ? metaTitle : 'Fenix Bakery'}"/>
+    <meta name="twitter:description" th:content="${metaDescription != null ? metaDescription : 'Auténtica panadería y dulcería cubana en New Jersey.'}"/>
+    <meta name="twitter:image" th:content="@{/img/logo.png}"/>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/css/public.css}"/>
+    <link rel="icon" type="image/png" th:href="@{/img/logo.png}"/>
+
+    <!-- Datos estructurados Schema.org — Bakery con 3 locaciones -->
+    <script type="application/ld+json" th:inline="none">
+    {
+      "@context": "https://schema.org",
+      "@type": "Bakery",
+      "name": "Fenix Bakery",
+      "description": "Auténtica panadería y dulcería cubana en New Jersey.",
+      "servesCuisine": "Cuban",
+      "priceRange": "$$",
+      "image": "https://www.fenixbakery.com/img/logo.png",
+      "url": "https://www.fenixbakery.com",
+      "sameAs": [
+        "https://www.instagram.com/elfenixbakery2019"
+      ],
+      "department": [
+        {
+          "@type": "Bakery",
+          "name": "Fenix Bakery — Union City",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "4211 Bergenline Ave",
+            "addressLocality": "Union City",
+            "addressRegion": "NJ",
+            "postalCode": "07087",
+            "addressCountry": "US"
+          },
+          "telephone": "+1-201-864-2699",
+          "geo": { "@type": "GeoCoordinates", "latitude": 40.77817815836558, "longitude": -74.02502107415496 }
+        },
+        {
+          "@type": "Bakery",
+          "name": "Fenix Bakery — West New York",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "6132 Bergenline Ave",
+            "addressLocality": "West New York",
+            "addressRegion": "NJ",
+            "postalCode": "07093",
+            "addressCountry": "US"
+          },
+          "telephone": "+1-201-854-2262",
+          "geo": { "@type": "GeoCoordinates", "latitude": 40.791367626875264, "longitude": -74.01460996925532 }
+        },
+        {
+          "@type": "Bakery",
+          "name": "Fenix Bakery — North Bergen",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "8133 Bergenline Ave",
+            "addressLocality": "North Bergen",
+            "addressRegion": "NJ",
+            "postalCode": "07047",
+            "addressCountry": "US"
+          },
+          "telephone": "+1-201-994-4060",
+          "geo": { "@type": "GeoCoordinates", "latitude": 40.803757534292856, "longitude": -74.00530350942387 }
+        }
+      ]
+    }
+    </script>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="nav-container">
+        <a th:href="@{/}" class="nav-brand-home"></a>
+        <ul class="nav-links">
+            <li><a th:href="@{/}"         th:classappend="${pagina == 'inicio'}    ? 'active'" th:text="#{nav.home}">Inicio</a></li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" th:classappend="${pagina == 'menu' or pagina == 'cakes' or pagina == 'fiestas'} ? 'active'">
+                    <span th:text="#{nav.products}">Productos</span> <span class="dropdown-arrow">▾</span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a th:href="@{/menu}" th:text="#{nav.products.full}">Menú Completo</a></li>
+                    <li><a th:href="@{/cakes}" th:text="#{nav.products.cakes}">Catálogo de Cakes</a></li>
+                    <li><a th:href="@{/fiestas}" th:text="#{nav.products.party}">Menú para Fiestas</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" th:classappend="${pagina == 'locaciones'} ? 'active'">
+                    <span th:text="#{nav.locations}">Locaciones</span> <span class="dropdown-arrow">▾</span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a th:href="@{/locaciones/north-bergen}" th:text="#{nav.loc.northBergen}">North Bergen</a></li>
+                    <li><a th:href="@{/locaciones/west-new-york}" th:text="#{nav.loc.westNewYork}">West New York</a></li>
+                    <li><a th:href="@{/locaciones/union-city}" th:text="#{nav.loc.unionCity}">Union City</a></li>
+                </ul>
+            </li>
+            <li><a th:href="@{/nosotros}" th:classappend="${pagina == 'nosotros'}  ? 'active'" th:text="#{nav.about}">Nosotros</a></li>
+            <li><a th:href="@{/contacto}" th:classappend="${pagina == 'contacto'}  ? 'active'" th:text="#{nav.contact}">Contacto</a></li>
+
+            <!-- Selector de idioma -->
+            <li class="lang-switcher">
+                <a th:href="@{/(lang=es)}" class="lang-btn" th:classappend="${#locale.language == 'es'} ? 'lang-active'">ES</a>
+                <span class="lang-sep">|</span>
+                <a th:href="@{/(lang=en)}" class="lang-btn" th:classappend="${#locale.language == 'en'} ? 'lang-active'">EN</a>
+            </li>
+
+            <!-- Iconos redes sociales -->
+            <li class="nav-social-icons">
+                <a href="https://www.instagram.com/elfenixbakery2019" target="_blank" rel="noopener" class="nav-social-icon" title="Instagram">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="2" width="20" height="20" rx="5"/>
+                        <circle cx="12" cy="12" r="4"/>
+                        <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+                    </svg>
+                </a>
+                <span class="nav-social-icon disabled" th:title="${#locale.language == 'en'} ? 'TikTok — coming soon' : 'TikTok — próximamente'">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/>
+                    </svg>
+                </span>
+                <span class="nav-social-icon disabled" th:title="${#locale.language == 'en'} ? 'Facebook — coming soon' : 'Facebook — próximamente'">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                    </svg>
+                </span>
+            </li>
+
+            <!-- Admin link oculto - acceder via /login -->
+        </ul>
+        <button class="nav-toggle" onclick="toggleNav()">☰</button>
+    </div>
+</nav>
+
+<main th:insert="~{${vista} :: content}"></main>
+
+<footer class="footer footer-modern">
+    <!-- Línea dorada superior -->
+    <div class="footer-gold-line"></div>
+
+    <div class="footer-modern-inner">
+        <!-- Logo + tagline centrado -->
+        <div class="footer-brand-center">
+            <img th:src="@{/img/logo.png}" alt="Fenix Bakery" class="footer-logo-img"/>
+            <p class="footer-brand-name">Fenix Bakery</p>
+            <p class="footer-tagline" th:text="#{footer.tagline}">Dulcería &amp; panadería cubana auténtica.</p>
+
+            <!-- Redes sociales -->
+            <div class="footer-social-links">
+                <a href="https://www.instagram.com/elfenixbakery2019" target="_blank" rel="noopener" class="footer-social-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <rect x="2" y="2" width="20" height="20" rx="5"/>
+                        <circle cx="12" cy="12" r="4"/>
+                        <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+                    </svg>
+                    Instagram
+                </a>
+                <span class="footer-social-btn footer-social-disabled">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/>
+                    </svg>
+                    TikTok
+                </span>
+                <span class="footer-social-btn footer-social-disabled">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                    </svg>
+                    Facebook
+                </span>
+            </div>
+        </div>
+
+        <!-- Links en fila -->
+        <nav class="footer-nav-row">
+            <div class="footer-nav-group">
+                <span class="footer-nav-title" th:text="#{footer.nav}">Navegación</span>
+                <div class="footer-nav-links">
+                    <a th:href="@{/}"         th:text="#{nav.home}">Inicio</a>
+                    <a th:href="@{/menu}"     th:text="#{nav.menu}">Menú</a>
+                    <a th:href="@{/nosotros}" th:text="#{nav.about}">Nosotros</a>
+                    <a th:href="@{/contacto}" th:text="#{nav.contact}">Contacto</a>
+                </div>
+            </div>
+            <div class="footer-divider-v"></div>
+            <div class="footer-nav-group">
+                <span class="footer-nav-title" th:text="#{footer.locations}">Locaciones</span>
+                <div class="footer-nav-links">
+                    <a th:href="@{/locaciones/north-bergen}" th:text="#{nav.loc.northBergen}">North Bergen</a>
+                    <a th:href="@{/locaciones/west-new-york}" th:text="#{nav.loc.westNewYork}">West New York</a>
+                    <a th:href="@{/locaciones/union-city}" th:text="#{nav.loc.unionCity}">Union City</a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Copyright -->
+        <div class="footer-bottom-modern">
+            <span>&copy; 2026 Fenix Bakery. <span th:text="#{footer.rights}">Todos los derechos reservados.</span></span>
+            <span th:text="${#locale.language == 'en'} ? 'Made with love in New Jersey' : 'Hecho con amor en New Jersey'">Hecho con amor en New Jersey</span>
+        </div>
+    </div>
+</footer>
+
+<script th:src="@{/js/public.js}"></script>
+</body>
+</html>

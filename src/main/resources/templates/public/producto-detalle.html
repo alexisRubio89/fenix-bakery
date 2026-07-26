@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{public/layout :: ~{::body/*}}">
+<body>
+<nav></nav>
+<main th:fragment="content">
+
+    <section class="product-detail-section">
+        <div class="product-detail-container">
+
+            <!-- Breadcrumb -->
+            <div class="product-breadcrumb">
+<a th:href="@{/menu}" th:text="${#locale.language == 'en'} ? '← Menu' : '← Menú'">← Menú</a>
+                <span>/</span>
+                <span th:text="${producto.categoria}">Categoría</span>
+                <span>/</span>
+                <span th:text="${producto.nombre}">Producto</span>
+            </div>
+
+            <div class="product-detail-grid">
+
+                <!-- Imagen -->
+                <div class="product-detail-img-wrap">
+                    <video th:if="${producto.tieneVideo}" th:src="${producto.video}" autoplay loop muted playsinline
+                           th:poster="${producto.imagen}" class="product-detail-img"></video>
+                    <img th:unless="${producto.tieneVideo}" th:src="${producto.imagen}" th:alt="${producto.nombre}" class="product-detail-img" onerror="this.onerror=null;this.src='/img/menu-placeholder.jpg'"/>
+                    <span class="product-popular-badge" th:if="${producto.popular}">⭐ Popular</span>
+                </div>
+
+                <!-- Info -->
+                <div class="product-detail-info">
+<span class="product-cat-tag" th:text="${#locale.language == 'en'} ? ${producto.categoriaEn} : ${producto.categoria}">Categoría</span>
+<h1 class="product-detail-title" th:text="${#locale.language == 'en'} ? ${producto.nombreEn} : ${producto.nombre}">Nombre</h1>
+<p class="product-detail-desc" th:text="${#locale.language == 'en'} ? ${producto.descripcionEn} : ${producto.descripcion}">Descripción</p>
+
+                    <div class="product-detail-price-row">
+                        <span class="product-detail-price" th:text="${producto.precio}">$0.00</span>
+                        <span class="product-detail-note" th:if="${producto.precio.startsWith('Desde')}">
+                            · Precio varía según diseño y tamaño
+                        </span>
+                    </div>
+
+                    <div class="product-ingredients">
+<h3 th:text="${#locale.language == 'en'} ? 'Ingredients' : 'Ingredientes'">Ingredientes</h3>
+<p th:text="${#locale.language == 'en'} ? ${producto.ingredientesEn} : ${producto.ingredientes}">Ingredientes...</p>
+                    </div>
+
+                    <div class="product-detail-actions">
+                        <a th:href="@{/contacto}" class="btn btn-primary" th:text="${#locale.language == 'en'} ? 'Place an Order' : 'Hacer un pedido'">Hacer un pedido</a>
+                        <a th:href="@{/menu}" class="btn btn-outline" th:text="${#locale.language == 'en'} ? 'View Full Menu' : 'Ver menú completo'">Ver menú completo</a>
+                    </div>
+
+                    <!-- Delivery links -->
+                    <div class="product-delivery">
+<p class="product-delivery-label" th:text="${#locale.language == 'en'} ? 'Order Online' : 'Pide en línea'">Pide en línea</p>
+                        <div class="delivery-buttons">
+                            <a href="https://www.grubhub.com/restaurant/fenix-bakery-i-4211-bergenline-ave-union-city/7656712"
+                               target="_blank" class="btn-delivery grubhub">
+                                <img src="/img/icon-grubhub.svg" class="delivery-icon" alt="GrubHub"/>GrubHub
+                            </a>
+                            <a href="https://www.ubereats.com/store/fenix-bakery-i/XvLlcc0fTbarrwDNgZtuHw?diningMode=DELIVERY"
+                               target="_blank" class="btn-delivery ubereats">
+                                <img src="/img/icon-ubereats.svg" class="delivery-icon" alt="Uber Eats"/>Uber Eats
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Productos relacionados -->
+            <div class="product-related" th:if="${!#lists.isEmpty(relacionados)}">
+<p class="section-eyebrow" th:text="${#locale.language == 'en'} ? 'You might also like' : 'También te puede gustar'">También te puede gustar</p>
+                <div class="related-grid">
+                    <a th:each="r : ${relacionados}"
+                       th:href="@{/menu/{slug}(slug=${r.slug})}"
+                       class="related-card">
+                        <div class="related-img">
+                            <img th:src="${r.imagen}" th:alt="${r.nombre}" onerror="this.onerror=null;this.src='/img/menu-placeholder.jpg'"/>
+                        </div>
+                        <div class="related-info">
+    <h4 th:text="${#locale.language == 'en'} ? ${r.nombreEn} : ${r.nombre}">Producto</h4>
+                            <span th:text="${r.precio}">$0.00</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</main>
+<footer></footer>
+</body>
+</html>

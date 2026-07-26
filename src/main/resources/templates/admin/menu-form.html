@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title th:text="${esNuevo} ? 'Nuevo producto | Admin' : 'Editar producto | Admin'">Producto | Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/css/admin.css}"/>
+</head>
+<body class="admin-body">
+
+<aside class="sidebar">
+    <div class="sidebar-brand"><img src="/img/logo.png" style="width:34px;height:34px;border-radius:50%;object-fit:cover;"> <span>El Fénix Bakery</span></div>
+    <nav class="sidebar-nav">
+        <a th:href="@{/admin/dashboard}" class="nav-item"><span class="nav-icon">📊</span> Dashboard</a>
+        <a th:href="@{/admin/menu}" class="nav-item active"><span class="nav-icon">🍽️</span> Menú</a>
+        <a th:href="@{/admin/cakes}" class="nav-item"><span class="nav-icon">🎂</span> Cakes</a>
+        <a th:href="@{/admin/fiestas}" class="nav-item"><span class="nav-icon">🎉</span> Fiestas</a>
+        <a th:href="@{/admin/inventario}" class="nav-item"><span class="nav-icon">📦</span> Inventario</a>
+        <a th:href="@{/admin/mensajes}" class="nav-item"><span class="nav-icon">✉️</span> Mensajes <span th:if="${sidebarNoLeidos > 0}" class="nav-badge" th:text="${sidebarNoLeidos}">0</span></a>
+        <a th:href="@{/}" class="nav-item"><span class="nav-icon">🌐</span> Ver sitio</a>
+    </nav>
+    <div class="sidebar-footer">
+        <span sec:authentication="name">Usuario</span>
+        <form th:action="@{/logout}" method="post" style="display:inline">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            <button type="submit" class="logout-btn">Salir</button>
+        </form>
+    </div>
+</aside>
+
+<main class="admin-main">
+    <div class="admin-header">
+        <div>
+            <h1 th:text="${esNuevo} ? 'Nuevo producto' : 'Editar producto'">Producto</h1>
+            <p>Completa los datos en español e inglés</p>
+        </div>
+        <a th:href="@{/admin/menu}" class="btn btn-outline">← Volver</a>
+    </div>
+
+    <div class="form-card">
+        <form th:action="@{/admin/menu/guardar}" method="post" th:object="${item}" enctype="multipart/form-data">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            <input type="hidden" th:field="*{id}"/>
+            <input type="hidden" th:field="*{slug}"/>
+            <input type="hidden" th:field="*{orden}"/>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Nombre (ES)</label>
+                    <input type="text" class="form-control" th:field="*{nombre}" required/>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Nombre (EN)</label>
+                    <input type="text" class="form-control" th:field="*{nombreEn}"/>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Categoría (ES)</label>
+                    <input type="text" class="form-control" th:field="*{categoria}" list="cats" required/>
+                    <datalist id="cats">
+                        <option value="Sandwiches"></option>
+                        <option value="Appetizer"></option>
+                        <option value="Batidos"></option>
+                        <option value="Pasteles"></option>
+                        <option value="Postres Cubanos"></option>
+                        <option value="Jugos"></option>
+                        <option value="Cafés"></option>
+                        <option value="Bebidas"></option>
+                        <option value="Pernil Asado"></option>
+                    </datalist>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Categoría (EN)</label>
+                    <input type="text" class="form-control" th:field="*{categoriaEn}"/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Descripción (ES)</label>
+                <textarea class="form-control" rows="2" th:field="*{descripcion}"></textarea>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Descripción (EN)</label>
+                <textarea class="form-control" rows="2" th:field="*{descripcionEn}"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Ingredientes (ES)</label>
+                <textarea class="form-control" rows="2" th:field="*{ingredientes}"></textarea>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Ingredientes (EN)</label>
+                <textarea class="form-control" rows="2" th:field="*{ingredientesEn}"></textarea>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Precio</label>
+                    <input type="text" class="form-control" th:field="*{precio}" placeholder="$0.00"/>
+                </div>
+                <div class="form-group">
+                    <input type="hidden" th:field="*{imagen}"/>
+                    <label class="form-label">Foto del producto</label>
+                    <div class="foto-upload">
+                        <img th:src="*{imagen}" id="fotoPreview"
+                             th:classappend="${item.imagen == null or item.imagen.isBlank()} ? 'sin-foto'"
+                             onerror="this.onerror=null;this.src='/img/menu-placeholder.jpg'"/>
+                        <div class="foto-upload-control">
+                            <input type="file" name="foto" id="fotoInput" accept="image/*" class="foto-input"/>
+                            <label for="fotoInput" class="btn btn-outline foto-btn">Seleccionar foto</label>
+                            <span class="foto-hint">JPG o PNG, máx 8MB</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIDEO (opcional) -->
+            <div class="form-group">
+                <label class="form-label">Video del producto (opcional)</label>
+                <p class="foto-hint" style="margin-bottom:.75rem">Clip corto (5s), se reproduce en bucle y silenciado. Si hay video, se muestra en vez de la foto; la foto queda como respaldo.</p>
+
+                <label class="form-label" style="font-size:.78rem">Opción 1 — Pegar URL del video (subido a S3)</label>
+                <input type="text" class="form-control" th:field="*{video}" placeholder="https://fenix-bakery-fotos.s3.us-east-1.amazonaws.com/menu-videos/..."/>
+                <p class="foto-hint" style="margin:.4rem 0 1rem">Sube el video a tu bucket S3 desde la consola de AWS, copia su URL y pégala aquí. (Recomendado para videos grandes.)</p>
+
+                <label class="form-label" style="font-size:.78rem">Opción 2 — Subir archivo de video</label>
+                <div class="video-upload">
+                    <div class="video-preview-wrap" th:if="${item.tieneVideo}" id="videoActual">
+                        <video th:src="*{video}" autoplay loop muted playsinline class="video-preview"></video>
+                        <label class="video-eliminar">
+                            <input type="checkbox" name="eliminarVideo" value="true"/>
+                            <span>Eliminar video actual</span>
+                        </label>
+                    </div>
+                    <div class="foto-upload-control">
+                        <input type="file" name="videoArchivo" id="videoInput" accept="video/mp4,video/*" class="foto-input"/>
+                        <label for="videoInput" class="btn btn-outline foto-btn">Seleccionar video</label>
+                        <span class="foto-hint" id="videoNombre">Ningún video seleccionado</span>
+                    </div>
+                    <video id="videoPreviewNuevo" class="video-preview" style="display:none" autoplay loop muted playsinline></video>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" style="display:flex;align-items:center;gap:.6rem;cursor:pointer">
+                    <input type="checkbox" th:field="*{popular}"/>
+                    <span>Marcar como Popular</span>
+                </label>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Guardar</button>
+                <a th:href="@{/admin/menu}" class="btn btn-outline">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</main>
+
+<script>
+document.getElementById('fotoInput').addEventListener('change', function(e) {
+    var file = e.target.files[0];
+    if (file) {
+        var reader = new FileReader();
+        reader.onload = function(ev) {
+            var img = document.getElementById('fotoPreview');
+            img.src = ev.target.result;
+            img.classList.remove('sin-foto');
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+document.getElementById('videoInput').addEventListener('change', function(e) {
+    var file = e.target.files[0];
+    var nombre = document.getElementById('videoNombre');
+    var preview = document.getElementById('videoPreviewNuevo');
+    if (file) {
+        nombre.textContent = file.name;
+        preview.src = URL.createObjectURL(file);
+        preview.style.display = 'block';
+    } else {
+        nombre.textContent = 'Ningún video seleccionado';
+        preview.style.display = 'none';
+    }
+});
+</script>
+</body>
+</html>

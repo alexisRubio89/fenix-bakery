@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{public/layout :: ~{::body/*}}">
+<body>
+<nav></nav>
+<main th:fragment="content">
+
+    <!-- HERO SPLIT: texto izq | CARRUSEL der -->
+    <section class="hero">
+        <div class="hero-left">
+            <img th:src="@{/img/logo.png}" alt="Fenix Bakery" class="hero-logo hero-anim"/>
+            <p class="hero-eyebrow hero-anim" th:text="#{hero.eyebrow}">Dulcería &amp; Panadería Cubana</p>
+            <h1 class="hero-title hero-anim">Fenix Bakery</h1>
+            <p class="hero-subtitle-text hero-anim" th:text="#{hero.subtitle}">El sabor auténtico de Cuba...</p>
+            <div class="hero-actions hero-anim">
+                <a th:href="@{/menu}" class="btn btn-primary" th:text="#{hero.btn.menu}">Explorar menú</a>
+                <a th:href="@{/contacto}" class="btn btn-outline" th:text="#{hero.btn.order}">Hacer un pedido</a>
+            </div>
+        </div>
+        <div class="hero-divider"></div>
+
+        <!-- CAMBIO 1: Carrusel de cakes -->
+        <div class="hero-right hero-right-anim">
+            <div class="hero-carousel" id="heroCarousel">
+                <div class="carousel-track" id="carouselTrack">
+                    <div class="carousel-slide active">
+                        <img src="/img/cake-tropical.webp" alt="Cake tropical"/>
+                    </div>
+                    <div class="carousel-slide">
+                        <img src="/img/menu-cake-flores.jpg" alt="Cake de flores"/>
+                    </div>
+                    <div class="carousel-slide">
+                        <img src="/img/menu-cake-blanco.jpg" alt="Cake blanco dos pisos"/>
+                    </div>
+                    <div class="carousel-slide">
+                        <img src="/img/menu-cake-otono.jpg" alt="Cake de otoño"/>
+                    </div>
+                    <div class="carousel-slide">
+                        <img src="/img/cake-frutas.webp" alt="Cake de frutas"/>
+                    </div>
+
+                </div>
+                <!-- Flechas -->
+                <button class="carousel-btn prev" onclick="carouselPrev()">&#8249;</button>
+                <button class="carousel-btn next" onclick="carouselNext()">&#8250;</button>
+                <!-- Dots -->
+                <div class="carousel-dots" id="carouselDots"></div>
+            </div>
+            <div class="hero-photo-badge">
+                <span th:text="#{hero.badge.title}">Especialidad de la casa</span>
+                <span th:text="#{hero.badge.sub}">Cakes decorados a medida</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- GALERÍA -->
+    <section class="gallery-section reveal">
+        <div class="gallery-container">
+            <div class="gallery-header">
+                <div>
+                    <p class="section-eyebrow" th:text="#{gallery.eyebrow}">Nuestras creaciones</p>
+                    <h2 class="section-title" style="margin-bottom:0">
+                        <span th:text="#{gallery.title}">Hechos con</span> <em th:text="#{gallery.titleEm}">amor</em>
+                    </h2>
+                </div>
+                <a th:href="@{/menu}" class="btn btn-outline" th:text="#{gallery.btn.menu}">Ver menú completo</a>
+            </div>
+            <div class="gallery-grid">
+                <div class="gallery-item tall reveal-item">
+                    <img th:src="@{/img/cake-frutas.webp}" alt="Cake de frutas"/>
+                    <span class="gallery-label"><span class="gallery-dot"></span><span th:text="#{gallery.label1}">Cakes de frutas</span></span>
+                </div>
+                <div class="gallery-item reveal-item">
+                    <img th:src="@{/img/tres-leches.jpg}" alt="Tres leches"/>
+                    <span class="gallery-label"><span class="gallery-dot"></span><span th:text="#{gallery.label2}">Tres Leches</span></span>
+                </div>
+                <div class="gallery-item reveal-item">
+                    <img th:src="@{/img/cake-tropical.webp}" alt="Cake tropical"/>
+                    <span class="gallery-label"><span class="gallery-dot"></span><span th:text="#{gallery.label3}">Cakes decorados</span></span>
+                </div>
+                <div class="gallery-item reveal-item">
+                    <img th:src="@{/img/surtido.jpg}" alt="Surtido cubano"/>
+                    <span class="gallery-label"><span class="gallery-dot"></span><span th:text="#{gallery.label4}">Surtido cubano</span></span>
+                </div>
+                <div class="gallery-item reveal-item">
+                    <img th:src="@{/img/cakes-cubanos.jpg}" alt="Cakes cubanos"/>
+                    <span class="gallery-label"><span class="gallery-dot"></span><span th:text="#{gallery.label5}">Especialidades</span></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CAMBIO 2: Especialidades con fotos, sin precio -->
+    <section class="section featured reveal">
+        <div class="section-container">
+            <p class="section-eyebrow" th:text="#{featured.eyebrow}">Lo más pedido</p>
+            <h2 class="section-title"><span th:text="#{featured.title}">Nuestras</span> <em th:text="#{featured.titleEm}">especialidades</em></h2>
+            <p class="section-desc" th:text="#{featured.desc}">Cada pieza sale del horno con décadas de tradición cubana.</p>
+            <div class="specialty-grid">
+                <a th:href="@{/menu/pan-cubano}" class="specialty-card reveal-item">
+                    <div class="specialty-img">
+                        <img src="/img/menu-pachy.jpg" alt="Pan Cubano"/>
+                    </div>
+                    <div class="specialty-info">
+                        <h3 th:text="#{product.pan.name}">Pan Cubano</h3>
+                        <p th:text="#{product.pan.desc}">El clásico pan largo cubano.</p>
+                    </div>
+                </a>
+                <a th:href="@{/menu/flan}" class="specialty-card reveal-item">
+                    <div class="specialty-img">
+                        <img src="/img/menu-flan.jpg" alt="Flan"/>
+                    </div>
+                    <div class="specialty-info">
+                        <h3 th:text="#{product.flan.name}">Flan de Leche</h3>
+                        <p th:text="#{product.flan.desc}">Cremoso, suave y bañado en caramelo.</p>
+                    </div>
+                </a>
+                <a th:href="@{/menu/pastelito-guayaba}" class="specialty-card reveal-item">
+                    <div class="specialty-img">
+                        <img src="/img/menu-pastelito-guayaba.jpg" alt="Pastelito de Guayaba"/>
+                    </div>
+                    <div class="specialty-info">
+                        <h3 th:text="#{product.panuelos.name}">Pastel de Guayaba</h3>
+                        <p th:text="#{product.panuelos.desc}">Hojaldre con guayaba.</p>
+                    </div>
+                </a>
+                <a th:href="@{/menu/tres-leches}" class="specialty-card reveal-item">
+                    <div class="specialty-img">
+                        <img src="/img/tres-leches1.jpg" alt="Tres Leches"/>
+                    </div>
+                    <div class="specialty-info">
+                        <h3 th:text="#{product.treeleches.name}">Cake Tres Leches</h3>
+                        <p th:text="#{product.treeleches.desc}">Esponjoso, húmedo, bañado en tres leches.</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <div class="gold-divider"></div>
+
+    <!-- VALORES -->
+    <section class="section values reveal">
+        <div class="section-container values-grid">
+            <div class="value-item reveal-item">
+                <div class="value-icon"><img th:src="@{/img/icon-bandera.png}" alt="" class="value-icon-img"/></div>
+                <h3 th:text="#{values.v1.title}">Recetas auténticas</h3>
+                <p th:text="#{values.v1.desc}">Tradición cubana pura.</p>
+            </div>
+            <div class="value-item reveal-item">
+                <div class="value-icon"><img th:src="@{/img/icon-fuego.png}" alt="" class="value-icon-img"/></div>
+                <h3 th:text="#{values.v2.title}">Horneado diario</h3>
+                <p th:text="#{values.v2.desc}">Todo fresco cada mañana.</p>
+            </div>
+            <div class="value-item reveal-item">
+                <div class="value-icon"><img th:src="@{/img/icon-chef.png}" alt="" class="value-icon-img"/></div>
+                <h3 th:text="#{values.v3.title}">Manos cubanas</h3>
+                <p th:text="#{values.v3.desc}">Maestros panaderos.</p>
+            </div>
+            <div class="value-item reveal-item">
+                <div class="value-icon"><img th:src="@{/img/icon-corazon.png}" alt="" class="value-icon-img"/></div>
+                <h3 th:text="#{values.v4.title}">Hecho con amor</h3>
+                <p th:text="#{values.v4.desc}">Así se hace en Cuba.</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="gold-divider"></div>
+
+
+
+</main>
+<footer></footer>
+</body>
+</html>

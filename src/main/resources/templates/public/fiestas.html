@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{public/layout :: ~{::body/*}}">
+<body>
+<nav></nav>
+<main th:fragment="content">
+
+    <section class="page-hero">
+        <p class="page-hero-eyebrow">Fenix Bakery</p>
+        <h1 th:text="${#locale.language == 'en'} ? 'Party Menu' : 'Menú para Fiestas'">Menú para Fiestas</h1>
+        <p th:text="${#locale.language == 'en'} ? 'Cuban catering for your celebrations' : 'Catering cubano para tus celebraciones'">Catering cubano para tus celebraciones</p>
+    </section>
+
+    <section class="section menu-bg">
+        <div class="section-container">
+
+            <div class="menu-product-grid">
+                <a th:each="p : ${productos}"
+                   th:href="@{/fiestas/{slug}(slug=${p.slug})}"
+                   class="menu-product-card">
+                    <div class="mpc-img">
+                        <video th:if="${p.tieneVideo}" th:src="${p.video}" autoplay loop muted playsinline
+                               th:poster="${p.imagen}" class="mpc-video"></video>
+                        <img th:unless="${p.tieneVideo}" th:src="${p.imagen}" th:alt="${p.nombre}" onerror="this.onerror=null;this.src='/img/menu-placeholder.jpg'"/>
+                        <span class="mpc-badge" th:if="${p.popular}">Popular</span>
+                    </div>
+                    <div class="mpc-info">
+                        <h4 th:text="${#locale.language == 'en'} ? ${p.nombreEn} : ${p.nombre}">Producto</h4>
+                        <p th:text="${#locale.language == 'en'} ? ${p.descripcionEn} : ${p.descripcion}">Descripción</p>
+                    </div>
+                </a>
+            </div>
+
+        </div>
+    </section>
+</main>
+<footer></footer>
+</body>
+</html>

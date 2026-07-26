@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{public/layout :: ~{::body/*}}">
+<body>
+<nav></nav>
+<main th:fragment="content">
+
+    <section class="page-hero">
+        <p class="page-hero-eyebrow">Fenix Bakery</p>
+        <h1 th:text="${#locale.language == 'en'} ? 'Cakes Catalog' : 'Catálogo de Cakes'">Catálogo de Cakes</h1>
+        <p th:text="${#locale.language == 'en'} ? 'Handcrafted cakes for every occasion' : 'Cakes hechos a mano para cada ocasión'">Cakes hechos a mano para cada ocasión</p>
+    </section>
+
+    <section class="section menu-bg">
+        <div class="section-container">
+
+            <div class="menu-controls">
+                <div class="menu-filters">
+                    <button class="filter-btn active" data-cat="all" th:text="${#locale.language == 'en'} ? 'All' : 'Todo'">Todo</button>
+                    <button class="filter-btn" data-cat="mini-cakes" th:text="${#locale.language == 'en'} ? 'Mini Cakes' : 'Mini Cakes'">Mini Cakes</button>
+                    <button class="filter-btn" data-cat="cakes-de-la-casa" th:text="${#locale.language == 'en'} ? 'House Cakes' : 'Cakes de la Casa'">Cakes de la Casa</button>
+                    <button class="filter-btn" data-cat="cakes-personalizados" th:text="${#locale.language == 'en'} ? 'Custom Cakes' : 'Cakes Personalizados'">Cakes Personalizados</button>
+                </div>
+            </div>
+
+            <div class="menu-product-grid" id="menuGrid">
+                <a th:each="c : ${cakes}"
+                   th:href="@{/cakes/{slug}(slug=${c.slug})}"
+                   class="menu-product-card"
+                   th:attr="data-cat=${c.catSlug}, data-name=${c.nombre}, data-popular=${c.popular}">
+                    <div class="mpc-img" th:classappend="${!c.tieneVideo and #lists.size(c.imagenes) > 1} ? 'cake-carousel'">
+                        <video th:if="${c.tieneVideo}" th:src="${c.video}" autoplay loop muted playsinline
+                               th:poster="${c.imagen}" class="mpc-video"></video>
+                        <img th:unless="${c.tieneVideo}" th:each="img, iter : ${c.imagenes}"
+                             th:src="${img}" th:alt="${c.nombre}"
+                             class="cake-carousel-img"
+                             th:classappend="${iter.index == 0} ? 'active'"
+                             onerror="this.onerror=null;this.src='/img/menu-placeholder.jpg'"/>
+                        <span class="mpc-badge" th:if="${c.popular}">Popular</span>
+                    </div>
+                    <div class="mpc-info">
+                        <h4 th:text="${#locale.language == 'en'} ? ${c.nombreEn} : ${c.nombre}">Cake</h4>
+                        <p th:text="${#locale.language == 'en'} ? ${c.descripcionEn} : ${c.descripcion}">Descripción</p>
+                        <div class="mpc-footer">
+                            <span class="mpc-cat" th:text="${#locale.language == 'en'} ? ${c.categoriaEn} : ${c.categoria}">Categoría</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="menu-empty" id="menuEmpty" style="display:none">
+                <p th:text="#{menu.empty}">No hay productos en esta categoría.</p>
+            </div>
+
+        </div>
+    </section>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var carousels = document.querySelectorAll('.cake-carousel');
+        carousels.forEach(function(carousel) {
+            var imgs = carousel.querySelectorAll('.cake-carousel-img');
+            if (imgs.length < 2) return;
+            var current = 0;
+            setInterval(function() {
+                imgs[current].classList.remove('active');
+                current = (current + 1) % imgs.length;
+                imgs[current].classList.add('active');
+            }, 3000);
+        });
+    });
+    </script>
+</main>
+<footer></footer>
+</body>
+</html>

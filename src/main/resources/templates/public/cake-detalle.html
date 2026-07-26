@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{public/layout :: ~{::body/*}}">
+<body>
+<nav></nav>
+<main th:fragment="content">
+
+    <section class="product-detail-section">
+        <div class="product-detail-container">
+
+            <div class="product-breadcrumb">
+                <a th:href="@{/cakes}" th:text="${#locale.language == 'en'} ? '← Cakes' : '← Cakes'">← Cakes</a>
+                <span>/</span>
+                <span th:text="${#locale.language == 'en'} ? ${cake.categoriaEn} : ${cake.categoria}">Categoría</span>
+                <span>/</span>
+                <span th:text="${#locale.language == 'en'} ? ${cake.nombreEn} : ${cake.nombre}">Cake</span>
+            </div>
+
+            <div class="product-detail-grid">
+
+                <!-- Galería -->
+                <div class="cake-gallery">
+                    <div class="cake-gallery-main">
+                        <video th:if="${cake.tieneVideo}" th:src="${cake.video}" id="cakeMainVideo"
+                               autoplay loop muted playsinline th:poster="${cake.imagen}"></video>
+                        <img th:unless="${cake.tieneVideo}" th:src="${cake.imagen}" th:alt="${cake.nombre}" id="cakeMainImg" onerror="this.onerror=null;this.src='/img/menu-placeholder.jpg'"/>
+                        <span class="product-popular-badge" th:if="${cake.popular}">⭐ Popular</span>
+                    </div>
+                    <div class="cake-gallery-thumbs" th:if="${#lists.size(cake.imagenes) > 1 or cake.tieneVideo}">
+                        <button th:if="${cake.tieneVideo}" type="button" class="cake-thumb active" data-tipo="video">
+                            <span class="cake-thumb-video">▶</span>
+                        </button>
+                        <button th:each="img, iter : ${cake.imagenes}"
+                                type="button"
+                                class="cake-thumb"
+                                th:classappend="${iter.index == 0 and !cake.tieneVideo} ? 'active'"
+                                th:attr="data-src=${img}">
+                            <img th:src="${img}" th:alt="${cake.nombre}" onerror="this.onerror=null;this.src='/img/menu-placeholder.jpg'"/>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Info -->
+                <div class="product-detail-info">
+                    <span class="product-cat-tag" th:text="${#locale.language == 'en'} ? ${cake.categoriaEn} : ${cake.categoria}">Categoría</span>
+                    <h1 class="product-detail-title" th:text="${#locale.language == 'en'} ? ${cake.nombreEn} : ${cake.nombre}">Nombre</h1>
+                    <p class="product-detail-desc" th:text="${#locale.language == 'en'} ? ${cake.descripcionEn} : ${cake.descripcion}">Descripción</p>
+
+                    <div class="product-detail-actions">
+                        <a th:href="@{/contacto}" class="btn btn-primary" th:text="${#locale.language == 'en'} ? 'Place an Order' : 'Hacer un pedido'">Hacer un pedido</a>
+                        <a th:href="@{/cakes}" class="btn btn-outline" th:text="${#locale.language == 'en'} ? 'View All Cakes' : 'Ver todos los cakes'">Ver todos los cakes</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Relacionados -->
+            <div class="product-related" th:if="${!#lists.isEmpty(relacionados)}">
+                <p class="section-eyebrow" th:text="${#locale.language == 'en'} ? 'You might also like' : 'También te puede gustar'">También te puede gustar</p>
+                <div class="related-grid">
+                    <a th:each="r : ${relacionados}"
+                       th:href="@{/cakes/{slug}(slug=${r.slug})}"
+                       class="related-card">
+                        <div class="related-img">
+                            <img th:src="${r.imagen}" th:alt="${r.nombre}" onerror="this.onerror=null;this.src='/img/menu-placeholder.jpg'"/>
+                        </div>
+                        <div class="related-info">
+                            <h4 th:text="${#locale.language == 'en'} ? ${r.nombreEn} : ${r.nombre}">Cake</h4>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <script>
+    (function() {
+        var mainWrap = document.querySelector('.cake-gallery-main');
+        var thumbs = document.querySelectorAll('.cake-thumb');
+
+        thumbs.forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var tipo = btn.getAttribute('data-tipo');
+                if (tipo === 'video') {
+                    // Volver a mostrar el video principal
+                    var vid = document.getElementById('cakeMainVideo');
+                    var img = document.getElementById('cakeMainImg');
+                    if (vid) { vid.style.display = ''; vid.play && vid.play(); }
+                    if (img) { img.style.display = 'none'; }
+                } else {
+                    var src = btn.getAttribute('data-src');
+                    var vid = document.getElementById('cakeMainVideo');
+                    var img = document.getElementById('cakeMainImg');
+                    if (vid) { vid.style.display = 'none'; }
+                    if (img) {
+                        img.style.display = '';
+                        img.src = src;
+                    } else if (vid) {
+                        // No había img (solo video); crear una para mostrar la foto
+                        var nueva = document.createElement('img');
+                        nueva.id = 'cakeMainImg';
+                        nueva.src = src;
+                        nueva.onerror = function(){ this.onerror=null; this.src='/img/menu-placeholder.jpg'; };
+                        vid.parentNode.insertBefore(nueva, vid.nextSibling);
+                    }
+                }
+                thumbs.forEach(function(t) { t.classList.remove('active'); });
+                btn.classList.add('active');
+            });
+        });
+    })();
+    </script>
+</main>
+<footer></footer>
+</body>
+</html>

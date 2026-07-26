@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{public/layout :: ~{::body/*}}">
+<body>
+<nav></nav>
+<main th:fragment="content">
+
+    <section class="product-detail-section">
+        <div class="product-detail-container">
+
+            <div class="product-breadcrumb">
+                <a th:href="@{/fiestas}" th:text="${#locale.language == 'en'} ? '← Party Menu' : '← Menú para Fiestas'">← Menú para Fiestas</a>
+                <span>/</span>
+                <span th:text="${#locale.language == 'en'} ? ${producto.nombreEn} : ${producto.nombre}">Producto</span>
+            </div>
+
+            <div class="product-detail-grid">
+
+                <div class="product-detail-img-wrap">
+                    <video th:if="${producto.tieneVideo}" th:src="${producto.video}" autoplay loop muted playsinline
+                           th:poster="${producto.imagen}" class="product-detail-img"></video>
+                    <img th:unless="${producto.tieneVideo}" th:src="${producto.imagen}" th:alt="${producto.nombre}" class="product-detail-img" onerror="this.onerror=null;this.src='/img/menu-placeholder.jpg'"/>
+                    <span class="product-popular-badge" th:if="${producto.popular}">⭐ Popular</span>
+                </div>
+
+                <div class="product-detail-info">
+                    <span class="product-cat-tag" th:text="${#locale.language == 'en'} ? 'Party Menu' : 'Menú para Fiestas'">Menú para Fiestas</span>
+                    <h1 class="product-detail-title" th:text="${#locale.language == 'en'} ? ${producto.nombreEn} : ${producto.nombre}">Nombre</h1>
+                    <p class="product-detail-desc" th:text="${#locale.language == 'en'} ? ${producto.descripcionEn} : ${producto.descripcion}">Descripción</p>
+
+                    <div class="product-ingredients">
+                        <h3 th:text="${#locale.language == 'en'} ? 'Details' : 'Detalles'">Detalles</h3>
+                        <p th:text="${#locale.language == 'en'} ? ${producto.detalleEn} : ${producto.detalle}">Detalles...</p>
+                    </div>
+
+                    <div class="product-detail-actions">
+                        <a th:href="@{/contacto}" class="btn btn-primary" th:text="${#locale.language == 'en'} ? 'Place an Order' : 'Hacer un pedido'">Hacer un pedido</a>
+                        <a th:href="@{/fiestas}" class="btn btn-outline" th:text="${#locale.language == 'en'} ? 'View Party Menu' : 'Ver menú para fiestas'">Ver menú para fiestas</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</main>
+<footer></footer>
+</body>
+</html>

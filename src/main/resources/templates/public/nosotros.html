@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{public/layout :: ~{::body/*}}">
+<body>
+<nav></nav>
+<main th:fragment="content">
+
+    <section class="page-hero">
+        <p class="page-hero-eyebrow" th:text="#{about.hero.eyebrow}">El Fénix Bakery — New Jersey</p>
+        <h1 th:text="#{about.hero.title}">Nuestra Historia</h1>
+        <p th:text="#{about.hero.subtitle}">De La Habana a New Jersey, con el alma cubana intacta</p>
+    </section>
+
+    <section class="section story-bg reveal">
+        <div class="section-container">
+
+            <div class="story-block">
+                <div class="story-text">
+                    <p class="section-eyebrow" th:text="#{about.s1.eyebrow}">Nuestros orígenes</p>
+                    <h2><span th:text="#{about.s1.title}">El origen de</span> <em th:text="#{about.s1.titleEm}">Fénix</em></h2>
+                    <p th:text="#{about.s1.p1}">Fénix Bakery nació hace más de 30 años...</p>
+                    <p th:text="#{about.s1.p2}">Años después unos primos cubanos...</p>
+                </div>
+                <div class="story-visual">
+                    <div class="story-photo-wrap">
+                        <img src="/img/capitolio-habana.jpg" alt="Capitolio Nacional de Cuba, La Habana"/>
+                        <div class="story-photo-caption">La Habana, Cuba</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="story-block reverse">
+                <div class="story-text">
+                    <p class="section-eyebrow" th:text="#{about.s2.eyebrow}">Nuestra filosofía</p>
+                    <h2><span th:text="#{about.s2.title}">Como el ave</span> <em th:text="#{about.s2.titleEm}">Fénix</em></h2>
+                    <p th:text="#{about.s2.p1}">El nombre no es casualidad...</p>
+                    <p th:text="#{about.s2.p2}">Hoy somos un equipo de 25 personas...</p>
+                </div>
+                <div class="story-visual">
+                    <div class="story-logo-wrap">
+                        <img src="/img/logo.png" alt="El Fénix Bakery" class="story-logo"/>
+                        <div class="story-photo-caption">New Jersey</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="team-photo-section reveal">
+                <p class="section-eyebrow" th:text="#{about.team.eyebrow}">Quiénes somos</p>
+                <h2 class="section-title"><span th:text="#{about.team.title}">El</span> <em th:text="#{about.team.titleEm}">equipo</em></h2>
+                <div class="team-full-photo">
+                    <img src="/img/equipo-fenix.avif" alt="Equipo El Fénix Bakery"/>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</main>
+<footer></footer>
+</body>
+</html>
