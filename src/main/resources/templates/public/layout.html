@@ -4,6 +4,16 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
+    <!-- Google Analytics (GA4) -->
+    <!-- IMPORTANTE: reemplaza G-XXXXXXXXXX (aparece 2 veces abajo) por tu ID de medición real -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YFGKBXGSS2"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-YFGKBXGSS2');
+    </script>
+
     <!-- SEO básico -->
     <title th:text="${metaTitle != null ? metaTitle : 'Fenix Bakery — Dulcería &amp; Panadería Cubana en New Jersey'}">Fenix Bakery</title>
     <meta name="description" th:content="${metaDescription != null ? metaDescription : 'Auténtica panadería y dulcería cubana en New Jersey. Pan cubano, pasteles, croquetas, cakes y postres tradicionales en North Bergen, West New York y Union City.'}"/>

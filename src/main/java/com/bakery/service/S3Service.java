@@ -61,6 +61,10 @@ public class S3Service {
             .bucket(bucket)
             .key(key)
             .contentType(archivo.getContentType())
+            // Cache de 1 año: las fotos/videos de productos no cambian (si se cambian,
+            // se sube un archivo nuevo con otro nombre). El navegador del visitante
+            // guarda el archivo y no lo vuelve a descargar en cada visita.
+            .cacheControl("public, max-age=31536000, immutable")
             .build();
 
         s3.putObject(request, RequestBody.fromBytes(archivo.getBytes()));
