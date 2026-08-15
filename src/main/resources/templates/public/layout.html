@@ -20,7 +20,12 @@
     <meta name="keywords" th:content="${metaKeywords != null ? metaKeywords : 'panadería cubana, Cuban bakery, New Jersey, North Bergen, West New York, Union City, pan cubano, pasteles, cakes, croquetas'}"/>
     <meta name="robots" content="index, follow"/>
     <meta name="author" content="Fenix Bakery"/>
-    <link rel="canonical" th:href="${canonicalUrl != null ? canonicalUrl : 'https://www.fenixbakery.com'}"/>
+    <link rel="canonical" th:if="${canonicalUrl != null}" th:href="${canonicalUrl}"/>
+
+    <!-- Versiones de idioma -->
+    <link rel="alternate" hreflang="es" th:href="'https://elfenixbakery.com' + ${currentPath} + '?lang=es'"/>
+    <link rel="alternate" hreflang="en" th:href="'https://elfenixbakery.com' + ${currentPath} + '?lang=en'"/>
+    <link rel="alternate" hreflang="x-default" th:if="${canonicalUrl != null}" th:href="${canonicalUrl}"/>
 
     <!-- Open Graph (redes sociales) -->
     <meta property="og:type" content="website"/>
@@ -51,8 +56,8 @@
       "description": "Auténtica panadería y dulcería cubana en New Jersey.",
       "servesCuisine": "Cuban",
       "priceRange": "$$",
-      "image": "https://www.fenixbakery.com/img/logo.png",
-      "url": "https://www.fenixbakery.com",
+      "image": "https://elfenixbakery.com/img/logo.png",
+      "url": "https://elfenixbakery.com",
       "sameAs": [
         "https://www.instagram.com/elfenixbakery2019"
       ],
@@ -135,9 +140,9 @@
 
             <!-- Selector de idioma -->
             <li class="lang-switcher">
-                <a th:href="@{/(lang=es)}" class="lang-btn" th:classappend="${#locale.language == 'es'} ? 'lang-active'">ES</a>
+                <a th:href="@{${currentPath}(lang='es')}" class="lang-btn" th:classappend="${#locale.language == 'es'} ? 'lang-active'">ES</a>
                 <span class="lang-sep">|</span>
-                <a th:href="@{/(lang=en)}" class="lang-btn" th:classappend="${#locale.language == 'en'} ? 'lang-active'">EN</a>
+                <a th:href="@{${currentPath}(lang='en')}" class="lang-btn" th:classappend="${#locale.language == 'en'} ? 'lang-active'">EN</a>
             </li>
 
             <!-- Iconos redes sociales -->
@@ -149,11 +154,11 @@
                         <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
                     </svg>
                 </a>
-                <span class="nav-social-icon disabled" th:title="${#locale.language == 'en'} ? 'TikTok — coming soon' : 'TikTok — próximamente'">
+                <a href="https://www.tiktok.com/@yosva54" target="_blank" rel="noopener" class="nav-social-icon" title="TikTok">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/>
                     </svg>
-                </span>
+                </a>
                 <span class="nav-social-icon disabled" th:title="${#locale.language == 'en'} ? 'Facebook — coming soon' : 'Facebook — próximamente'">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
@@ -190,12 +195,12 @@
                     </svg>
                     Instagram
                 </a>
-                <span class="footer-social-btn footer-social-disabled">
+                <a href="https://www.tiktok.com/@yosva54" target="_blank" rel="noopener" class="footer-social-btn">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/>
                     </svg>
                     TikTok
-                </span>
+                </a>
                 <span class="footer-social-btn footer-social-disabled">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>

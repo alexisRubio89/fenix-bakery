@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.CsrfFilter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,15 +35,23 @@ public class SecurityConfig {
     @Value("${gerente.password:}")
     private String gerentePassword;
 
+    private final CsrfEarlyLoadFilter csrfEarlyLoadFilter;
+
+    public SecurityConfig(CsrfEarlyLoadFilter csrfEarlyLoadFilter) {
+        this.csrfEarlyLoadFilter = csrfEarlyLoadFilter;
+    }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+            .addFilterAfter(csrfEarlyLoadFilter, CsrfFilter.class)
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/", "/menu", "/menu/**", "/nosotros", "/contacto").permitAll()
                 .requestMatchers("/cakes", "/cakes/**", "/fiestas", "/fiestas/**").permitAll()
                 .requestMatchers("/locaciones/**").permitAll()
                 .requestMatchers("/css/**", "/js/**", "/img/**").permitAll()
                 .requestMatchers("/sitemap.xml", "/robots.txt").permitAll()
+                .requestMatchers("/pdf/**").permitAll()
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form

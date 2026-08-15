@@ -16,6 +16,7 @@ public class MenuController {
     @GetMapping("/menu")
     public String menu(Model model) {
         model.addAttribute("pagina", "menu");
+        model.addAttribute("canonicalUrl", "https://elfenixbakery.com/menu");
         model.addAttribute("productos", menuService.obtenerTodos());
         return "public/menu";
     }
@@ -24,6 +25,7 @@ public class MenuController {
     public String detalle(@PathVariable String slug, Model model) {
         return menuService.obtenerPorSlug(slug).map(p -> {
             model.addAttribute("pagina", "menu");
+            model.addAttribute("canonicalUrl", "https://elfenixbakery.com/menu/" + p.getSlug());
             model.addAttribute("producto", p);
             model.addAttribute("relacionados",
                 menuService.obtenerPorCategoria(p.getCatSlug()).stream()

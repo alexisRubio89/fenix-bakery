@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Dashboard | Admin Fénix Bakery</title>
+    <title>Dashboard | Admin Fenix Bakery</title>
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
     <link rel="stylesheet" th:href="@{/css/admin.css}"/>
@@ -15,7 +15,7 @@
 <aside class="sidebar">
     <div class="sidebar-brand">
         <span></span>
-        <span>Fénix Bakery</span>
+        <span>Fenix Bakery</span>
     </div>
     <nav class="sidebar-nav">
         <a th:href="@{/admin/dashboard}" class="nav-item active">
@@ -24,6 +24,7 @@
         <a th:href="@{/admin/menu}" class="nav-item"><span class="nav-icon">🍽️</span> Menú</a>
         <a th:href="@{/admin/cakes}" class="nav-item"><span class="nav-icon">🎂</span> Cakes</a>
         <a th:href="@{/admin/fiestas}" class="nav-item"><span class="nav-icon">🎉</span> Fiestas</a>
+        <a th:href="@{/admin/especialidades}" class="nav-item"><span class="nav-icon">⭐</span> Especialidades</a>
         <a th:href="@{/admin/inventario}" class="nav-item">
             <span class="nav-icon">📦</span> Inventario
         </a>
@@ -103,7 +104,7 @@
                     <tr th:each="p : ${stockBajo}">
                         <td th:text="${p.nombre}"></td>
                         <td><span class="badge" th:text="${p.categoria}"></span></td>
-                        <td><span class="badge danger" th:text="${p.cantidad}"></span></td>
+                        <td><span class="badge danger" th:text="${p.cantidadConUnidad}"></span></td>
                         <td>
                             <a th:href="@{/admin/inventario/editar/{id}(id=${p.id})}" class="btn-sm">Editar</a>
                         </td>

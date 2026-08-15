@@ -12,6 +12,7 @@ public class LocacionesController {
     @GetMapping("/north-bergen")
     public String northBergen(Model model) {
         model.addAttribute("pagina", "locaciones");
+        model.addAttribute("canonicalUrl", "https://elfenixbakery.com/locaciones/north-bergen");
         model.addAttribute("locacion", "North Bergen");
         model.addAttribute("direccion", "8133 Bergenline Ave, North Bergen, NJ 07047");
         model.addAttribute("mapsQuery", "El Fenix Bakery, 8133 Bergenline Ave, North Bergen, NJ 07047");
@@ -31,6 +32,7 @@ public class LocacionesController {
     @GetMapping("/west-new-york")
     public String westNewYork(Model model) {
         model.addAttribute("pagina", "locaciones");
+        model.addAttribute("canonicalUrl", "https://elfenixbakery.com/locaciones/west-new-york");
         model.addAttribute("locacion", "West New York");
         model.addAttribute("direccion", "6132 Bergenline Ave, West New York, NJ 07093");
         model.addAttribute("mapsQuery", "El Fenix Bakery, 6132 Bergenline Ave, West New York, NJ 07093");
@@ -50,6 +52,7 @@ public class LocacionesController {
     @GetMapping("/union-city")
     public String unionCity(Model model) {
         model.addAttribute("pagina", "locaciones");
+        model.addAttribute("canonicalUrl", "https://elfenixbakery.com/locaciones/union-city");
         model.addAttribute("locacion", "Union City");
         model.addAttribute("direccion", "4211 Bergenline Ave, Union City, NJ 07087");
         model.addAttribute("mapsQuery", "El Fenix Bakery, 4211 Bergenline Ave, Union City, NJ 07087");

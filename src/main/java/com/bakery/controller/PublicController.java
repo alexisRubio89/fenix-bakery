@@ -1,12 +1,15 @@
 package com.bakery.controller;
 
 import com.bakery.service.EmailService;
+import com.bakery.service.PDFMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 public class PublicController {
@@ -17,12 +20,19 @@ public class PublicController {
     @Autowired
     private com.bakery.service.MensajeContactoService mensajeService;
 
+    @Autowired
+    private PDFMenuService pdfMenuService;
+
+    @Autowired
+    private com.bakery.service.EspecialidadService especialidadService;
+
     @GetMapping("/")
     public String inicio(Model model) {
         model.addAttribute("pagina", "inicio");
         model.addAttribute("metaTitle", "Fenix Bakery — Panadería y Dulcería Cubana en New Jersey");
         model.addAttribute("metaDescription", "Auténtica panadería cubana en New Jersey. Pan cubano, croquetas, pasteles, cakes y postres tradicionales horneados frescos cada día en North Bergen, West New York y Union City.");
-        model.addAttribute("canonicalUrl", "https://www.fenixbakery.com/");
+        model.addAttribute("canonicalUrl", "https://elfenixbakery.com/");
+        model.addAttribute("especialidades", especialidadService.obtenerTarjetas());
         return "public/inicio";
     }
 
@@ -31,7 +41,7 @@ public class PublicController {
         model.addAttribute("pagina", "nosotros");
         model.addAttribute("metaTitle", "Nuestra Historia | Fenix Bakery — Panadería Cubana NJ");
         model.addAttribute("metaDescription", "Conoce la historia de Fenix Bakery: de La Habana a New Jersey. Tradición cubana, recetas auténticas y pasión por la repostería desde hace más de 30 años.");
-        model.addAttribute("canonicalUrl", "https://www.fenixbakery.com/nosotros");
+        model.addAttribute("canonicalUrl", "https://elfenixbakery.com/nosotros");
         return "public/nosotros";
     }
 
@@ -40,7 +50,7 @@ public class PublicController {
         model.addAttribute("pagina", "contacto");
         model.addAttribute("metaTitle", "Contacto y Locaciones | Fenix Bakery NJ");
         model.addAttribute("metaDescription", "Visítanos en Union City, West New York o North Bergen. Encuentra horarios, teléfonos y la locación más cercana de Fenix Bakery en New Jersey.");
-        model.addAttribute("canonicalUrl", "https://www.fenixbakery.com/contacto");
+        model.addAttribute("canonicalUrl", "https://elfenixbakery.com/contacto");
         return "public/contacto";
     }
 
@@ -54,10 +64,14 @@ public class PublicController {
             Model model) {
         model.addAttribute("pagina", "contacto");
         try {
-            // Guardar en base de datos (con filtro de groserías aplicado en el servicio)
+            // Guardar en base de datos (con filtro de groserías y anti-spam aplicados en el servicio)
             mensajeService.guardar(nombre, email, telefono, asunto, mensaje);
             // Enviar también por email
             emailService.enviarMensajeContacto(nombre, email, telefono, asunto, mensaje);
+            model.addAttribute("enviado", true);
+        } catch (com.bakery.service.MensajeSpamException e) {
+            // Bloqueado por el filtro anti-spam: no se guarda ni se envía,
+            // pero se muestra la misma confirmación para no revelar el filtro a bots
             model.addAttribute("enviado", true);
         } catch (Exception e) {
             model.addAttribute("error", true);
@@ -68,6 +82,24 @@ public class PublicController {
     @GetMapping("/login")
     public String login() {
         return "login";
+    }
+
+    // ── Descarga dinámica del menú PDF ──
+    @GetMapping("/pdf/menu")
+    public ResponseEntity<byte[]> downloadMenuPDF(
+            @RequestParam(defaultValue = "es") String locale,
+            HttpServletRequest request) {
+        try {
+            byte[] pdfContent = pdfMenuService.generateMenuPDF(locale);
+            return ResponseEntity.ok()
+                    .header("Content-Type", "application/pdf")
+                    .header("Content-Disposition", "attachment; filename=Menu-Fenix-Bakery.pdf")
+                    .header("Cache-Control", "public, max-age=3600") // cache 1 hora
+                    .body(pdfContent);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).build();
+        }
     }
 }
 

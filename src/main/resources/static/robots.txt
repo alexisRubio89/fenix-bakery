@@ -3,4 +3,4 @@ Allow: /
 Disallow: /login
 Disallow: /admin
 
-Sitemap: https://www.fenixbakery.com/sitemap.xml
+Sitemap: https://elfenixbakery.com/sitemap.xml

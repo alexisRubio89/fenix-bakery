@@ -122,6 +122,10 @@ button { cursor: pointer; font-family: inherit; }
 .form-control { width: 100%; padding: .75rem 1rem; border: 1px solid var(--border2); border-radius: 6px; font-family: var(--font-sans); font-size: .95rem; color: var(--text); background: rgba(255,255,255,.04); transition: border-color .2s; }
 .form-control::placeholder { color: var(--muted); }
 .form-control:focus { outline: none; border-color: var(--gold); }
+/* El desplegable nativo se pinta sobre fondo blanco del sistema:
+   forzamos texto oscuro para que las opciones sean legibles. */
+.form-control option,
+.form-control optgroup { color: #222; background: #fff; }
 .form-control.is-invalid { border-color: var(--danger); }
 .form-error { color: var(--danger); font-size: .8rem; margin-top: .3rem; }
 .form-actions { display: flex; gap: 1rem; margin-top: .5rem; }
@@ -510,4 +514,234 @@ input[type="checkbox"]:indeterminate::after {
     font-size: .82rem;
     color: var(--danger);
     cursor: pointer;
+}
+
+/* ── Pestañas de tipo en inventario ───────────────── */
+.tipo-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    margin-bottom: 1.25rem;
+    border-bottom: 1px solid rgba(212, 175, 55, .25);
+    padding-bottom: .75rem;
+}
+.tipo-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: .45rem;
+    padding: .55rem 1rem;
+    border-radius: 8px;
+    border: 1px solid rgba(212, 175, 55, .3);
+    color: #d8d2c4;
+    text-decoration: none;
+    font-size: .92rem;
+    transition: background .15s, border-color .15s, color .15s;
+}
+.tipo-tab:hover { border-color: rgba(212, 175, 55, .7); color: #f0e9da; }
+.tipo-tab.active {
+    background: rgba(212, 175, 55, .16);
+    border-color: #d4af37;
+    color: #f5e9c8;
+    font-weight: 600;
+}
+.tipo-tab .tab-count {
+    background: rgba(255, 255, 255, .1);
+    border-radius: 999px;
+    padding: .08rem .5rem;
+    font-size: .78rem;
+}
+.tipo-tab.tab-alert { margin-left: auto; }
+.tipo-tab.tab-alert.active { background: rgba(220, 80, 80, .18); border-color: #dc5050; color: #ffd9d9; }
+
+/* ── Ajuste rápido de existencia en la tabla ──────── */
+.qty-form { display: flex; align-items: center; gap: .35rem; }
+.qty-input {
+    width: 78px;
+    padding: .3rem .45rem;
+    border-radius: 6px;
+    border: 1px solid rgba(212, 175, 55, .35);
+    background: rgba(0, 0, 0, .25);
+    color: #f0e9da;
+    font-size: .9rem;
+}
+.qty-input:focus { outline: none; border-color: #d4af37; }
+.qty-unit { font-size: .8rem; color: #a89f8c; min-width: 28px; }
+
+/* Pista bajo los campos del formulario */
+.form-hint { display: block; margin-top: .3rem; font-size: .78rem; color: #a89f8c; }
+
+/* Desglose cajas + sueltas en el ajuste rápido */
+.qty-split { display: inline-flex; align-items: center; gap: .3rem; }
+.qty-total { display: block; margin-top: .25rem; font-size: .72rem; color: #8d8371; }
+
+/* ════════════════════════════════════════════════════
+   MÓVIL — el admin se trabaja sobre todo desde el teléfono
+   ════════════════════════════════════════════════════ */
+@media (max-width: 760px) {
+
+    /* ── Sidebar convertido en barra inferior tipo app ── */
+    .sidebar {
+        top: auto; bottom: 0; left: 0; right: 0;
+        width: 100%; height: auto;
+        flex-direction: row; align-items: stretch;
+        overflow: visible;
+        border-right: none;
+        border-top: 1px solid var(--border);
+        /* respeta la franja de gestos de los iPhone */
+        padding-bottom: env(safe-area-inset-bottom, 0);
+        box-shadow: 0 -4px 16px rgba(0,0,0,.4);
+    }
+    .sidebar-brand { display: none; }
+    .sidebar-nav {
+        flex: 1; display: flex; padding: 0;
+        overflow-x: auto; -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+    .sidebar-nav::-webkit-scrollbar { display: none; }
+
+    .nav-item {
+        flex-direction: column; justify-content: center;
+        gap: .15rem; padding: .5rem .7rem;
+        min-width: 62px; flex-shrink: 0;
+        font-size: .62rem; letter-spacing: 0; text-align: center;
+        border-left: none; border-top: 3px solid transparent;
+        position: relative;
+    }
+    /* Se vuelven a mostrar las etiquetas: en una barra inferior el icono solo no basta */
+    .nav-item span:last-child { display: inline !important; }
+    .nav-item:hover, .nav-item.active { border-left-color: transparent; border-top-color: var(--gold); }
+    .nav-icon { font-size: 1.25rem; }
+    .nav-badge { position: absolute; top: 2px; right: 10px; margin-left: 0; min-width: 16px; height: 16px; font-size: .6rem; }
+
+    .sidebar-footer {
+        flex-direction: column; justify-content: center;
+        padding: .4rem .7rem; border-top: none;
+        border-left: 1px solid var(--border); flex-shrink: 0;
+    }
+    .sidebar-footer span { display: none !important; }
+    .logout-btn { padding: .4rem .7rem; font-size: .7rem; }
+
+    /* El contenido deja hueco para la barra inferior.
+       min-width:0 es imprescindible: .admin-main es un flex item y su
+       min-width:auto por defecto le impediría encoger, estirando la
+       página a lo ancho del contenido más largo. */
+    .admin-main {
+        margin-left: 0;
+        min-width: 0;
+        width: 100%;
+        max-width: 100%;
+        padding: 1rem .85rem calc(90px + env(safe-area-inset-bottom, 0));
+    }
+    .admin-body { display: block; }
+
+    .admin-header { flex-direction: column; align-items: stretch; gap: .85rem; }
+    .admin-header h1 { font-size: 1.5rem; }
+    .admin-header .btn { width: 100%; text-align: center; }
+
+    /* ── Pestañas: deslizables en horizontal ── */
+    .tipo-tabs { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+    .tipo-tabs::-webkit-scrollbar { display: none; }
+    .tipo-tab { flex-shrink: 0; padding: .5rem .8rem; font-size: .82rem; }
+    .tipo-tab.tab-alert { margin-left: 0; }
+
+    .filter-bar { flex-direction: column; align-items: stretch; gap: .75rem; }
+    .search-form { display: flex; gap: .5rem; }
+    .search-input { flex: 1; min-width: 0; }
+    .cat-filters { display: flex; flex-wrap: nowrap; overflow-x: auto; gap: .4rem; scrollbar-width: none; }
+    .cat-filters::-webkit-scrollbar { display: none; }
+    .filter-chip { flex-shrink: 0; white-space: nowrap; }
+
+    /* ── La tabla pasa a tarjetas apiladas ── */
+    .table-wrap { overflow: visible; border: none; background: transparent; }
+    .admin-table thead { display: none; }
+    .admin-table, .admin-table tbody, .admin-table tr, .admin-table td { display: block; width: 100%; }
+
+    .admin-table tr {
+        background: var(--dark2);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: .9rem 1rem;
+        margin-bottom: .85rem;
+    }
+    .admin-table tr.row-warning { border-color: rgba(220,80,80,.55); }
+
+    .admin-table td {
+        border: none;
+        padding: .4rem 0;
+        display: flex; align-items: center; justify-content: space-between;
+        gap: .75rem;
+        font-size: .9rem;
+    }
+    /* La etiqueta de la columna acompaña al dato */
+    .admin-table td[data-label]::before {
+        content: attr(data-label);
+        color: var(--muted);
+        font-size: .72rem;
+        text-transform: uppercase;
+        letter-spacing: .05em;
+        flex-shrink: 0;
+    }
+    /* El nombre encabeza la tarjeta, a lo ancho */
+    .admin-table td.cell-nombre {
+        display: block;
+        padding: 0 0 .6rem;
+        margin-bottom: .4rem;
+        border-bottom: 1px solid var(--border);
+        font-size: 1rem;
+    }
+    .admin-table td.cell-nombre .desc-cell {
+        white-space: normal; max-width: none;
+        font-size: .78rem; margin-top: .2rem;
+    }
+
+    /* Existencia a lo ancho, con su etiqueta encima */
+    .admin-table td[data-label="Existencia"] { display: block; }
+    .admin-table td[data-label="Existencia"]::before { display: block; margin-bottom: .35rem; }
+
+    /* Acciones: etiqueta arriba y los dos botones repartidos */
+    .admin-table td.actions-cell {
+        display: flex; flex-wrap: wrap; gap: .5rem; padding-top: .7rem;
+        white-space: normal;   /* anula el nowrap de escritorio */
+    }
+    .admin-table td.actions-cell::before { flex-basis: 100%; margin-bottom: .1rem; }
+    .admin-table td.actions-cell > a,
+    .admin-table td.actions-cell > form { flex: 1; }
+    .admin-table td.actions-cell > a { text-align: center; }
+    .admin-table td.actions-cell > form > button { width: 100%; }
+
+    .empty-state { text-align: center; }
+
+    /* ── Ajuste rápido cómodo con el dedo ── */
+    .qty-form { display: flex; flex-wrap: wrap; gap: .45rem; width: 100%; }
+    /* display:flex (no inline-flex): así lo dimensiona el padre y no su contenido */
+    .qty-split { display: flex; flex: 1 1 100%; width: 100%; min-width: 0; gap: .35rem; }
+    /* width:0 + flex-basis:0 hace que los campos se repartan el ancho por igual */
+    .qty-input { flex: 1 1 0; width: 0; min-width: 0; padding: .6rem .4rem; font-size: 16px; text-align: center; }
+    .qty-unit { white-space: nowrap; flex-shrink: 0; min-width: auto; font-size: .78rem; }
+    /* Guardar a lo ancho: objetivo táctil cómodo bajo los campos */
+    .qty-form .btn-sm { padding: .6rem 1rem; flex: 1 1 100%; }
+
+    /* ── Botones y campos con área táctil suficiente ── */
+    .btn { padding: .75rem 1.2rem; }
+    .btn-sm { padding: .55rem .9rem; font-size: .8rem; display: inline-block; }
+
+    .form-card { padding: 1.1rem; }
+    .form-actions { flex-direction: column; }
+    .form-actions .btn { width: 100%; text-align: center; }
+}
+
+/* Evita que iOS haga zoom al enfocar un campo: necesita 16px reales */
+@media (max-width: 760px) {
+    .form-control, .search-input, input[type="text"],
+    input[type="number"], input[type="password"], textarea, select {
+        font-size: 16px;
+    }
+}
+
+/* Botones agrupados en la cabecera del admin */
+.header-actions { display: flex; gap: .6rem; align-items: center; }
+@media (max-width: 760px) {
+    .header-actions { width: 100%; }
+    .header-actions .btn { flex: 1; text-align: center; }
+    .admin-header .btn { width: auto; }
 }

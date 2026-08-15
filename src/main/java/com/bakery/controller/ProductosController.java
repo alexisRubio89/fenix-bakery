@@ -21,6 +21,7 @@ public class ProductosController {
     @GetMapping("/cakes")
     public String cakes(Model model) {
         model.addAttribute("pagina", "cakes");
+        model.addAttribute("canonicalUrl", "https://elfenixbakery.com/cakes");
         model.addAttribute("cakes", cakeService.obtenerTodos());
         return "public/cakes";
     }
@@ -29,6 +30,7 @@ public class ProductosController {
     public String cakeDetalle(@PathVariable String slug, Model model) {
         return cakeService.obtenerPorSlug(slug).map(c -> {
             model.addAttribute("pagina", "cakes");
+            model.addAttribute("canonicalUrl", "https://elfenixbakery.com/cakes/" + c.getSlug());
             model.addAttribute("cake", c);
             model.addAttribute("relacionados",
                 cakeService.obtenerPorCategoria(c.getCatSlug()).stream()
@@ -42,6 +44,7 @@ public class ProductosController {
     @GetMapping("/fiestas")
     public String fiestas(Model model) {
         model.addAttribute("pagina", "fiestas");
+        model.addAttribute("canonicalUrl", "https://elfenixbakery.com/fiestas");
         model.addAttribute("productos", fiestaService.obtenerTodos());
         return "public/fiestas";
     }
@@ -50,6 +53,7 @@ public class ProductosController {
     public String fiestaDetalle(@PathVariable String slug, Model model) {
         return fiestaService.obtenerPorSlug(slug).map(p -> {
             model.addAttribute("pagina", "fiestas");
+            model.addAttribute("canonicalUrl", "https://elfenixbakery.com/fiestas/" + p.getSlug());
             model.addAttribute("producto", p);
             return "public/fiesta-detalle";
         }).orElse("redirect:/fiestas");

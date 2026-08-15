@@ -151,7 +151,7 @@ public class MenuSeeder implements CommandLineRunner {
             "$8.50", "/img/menu-pan-cubano-entero.jpg", false, 16),
 
         new MenuItem("empanadas-beef", "Empanadas (Carne)", "Empanadas (Beef)",
-            "Appetizer", "Appetizers",
+            "Aperitivo", "Appetizers",
             "Tierna carne de res envuelta en una masa crujiente.",
             "Tender beef wrapped in a crispy pastry.",
             "Masa, carne molida, cebolla, ajo, comino, sal",
@@ -159,7 +159,7 @@ public class MenuSeeder implements CommandLineRunner {
             "$2.80", "/img/menu-empanadas-beef.jpg", true, 17),
 
         new MenuItem("ham-croquettes", "Croquetas de Jamón", "Ham Croquettes",
-            "Appetizer", "Appetizers",
+            "Aperitivo", "Appetizers",
             "Crujientes bocados rellenos de sabroso jamón.",
             "Crispy bites filled with savory ham.",
             "Jamón, bechamel, pan rallado, huevo",
@@ -167,7 +167,7 @@ public class MenuSeeder implements CommandLineRunner {
             "$1.50", "/img/menu-ham-croquettes.jpg", true, 18),
 
         new MenuItem("papas-rellenas", "Papas Rellenas", "Papas Rellenas",
-            "Appetizer", "Appetizers",
+            "Aperitivo", "Appetizers",
             "Papas rellenas con un sabroso relleno.",
             "Stuffed potatoes with a savory filling.",
             "Papa, carne molida, sofrito, pan rallado, huevo",
@@ -175,7 +175,7 @@ public class MenuSeeder implements CommandLineRunner {
             "$2.50", "/img/menu-papas-rellenas.jpg", false, 19),
 
         new MenuItem("tira-bocaditos", "Tira de Bocaditos", "Tira de Bocaditos",
-            "Appetizer", "Appetizers",
+            "Aperitivo", "Appetizers",
             "Crujientes bocados de masa rellenos de sabores deliciosos.",
             "Crispy pastry bites filled with savory flavors.",
             "Pan suave, pasta de bocaditos",
@@ -183,7 +183,7 @@ public class MenuSeeder implements CommandLineRunner {
             "$4.50", "/img/menu-tira-bocaditos.jpg", false, 20),
 
         new MenuItem("pasta-bocaditos", "Pasta de Bocaditos (1 Libra)", "Pasta de Bocaditos (1 Pound)",
-            "Appetizer", "Appetizers",
+            "Aperitivo", "Appetizers",
             "Una libra de pasta cremosa para untar, ideal para preparar bocaditos en casa.",
             "Ham spread. One pound of creamy spread, ideal for making finger sandwiches at home.",
             "Jamón, queso crema, mayonesa, especias",
@@ -191,7 +191,7 @@ public class MenuSeeder implements CommandLineRunner {
             "$13.00", "/img/menu-pasta-bocaditos.jpg", false, 21),
 
         new MenuItem("empanada-queso", "Empanada de Queso", "Empanada de Queso (Cheese)",
-            "Appetizer", "Appetizers",
+            "Aperitivo", "Appetizers",
             "Sabrosa masa rellena de queso derretido.",
             "Savory pastry filled with melted cheese.",
             "Masa, queso",
@@ -199,7 +199,7 @@ public class MenuSeeder implements CommandLineRunner {
             "$2.80", "/img/menu-empanada-queso.jpg", false, 22),
 
         new MenuItem("empanadas-pollo", "Empanadas de Pollo", "Empanadas de Pollo (Chicken)",
-            "Appetizer", "Appetizers",
+            "Aperitivo", "Appetizers",
             "Tierno pollo envuelto en una masa hojaldrada.",
             "Tender chicken wrapped in a flaky pastry.",
             "Masa, pollo, sofrito, especias",

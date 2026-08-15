@@ -6,7 +6,7 @@
 <main th:fragment="content">
 
     <section class="page-hero">
-        <p class="page-hero-eyebrow" th:text="#{about.hero.eyebrow}">El Fénix Bakery — New Jersey</p>
+        <p class="page-hero-eyebrow" th:text="#{about.hero.eyebrow}">El Fenix Bakery — New Jersey</p>
         <h1 th:text="#{about.hero.title}">Nuestra Historia</h1>
         <p th:text="#{about.hero.subtitle}">De La Habana a New Jersey, con el alma cubana intacta</p>
     </section>
@@ -17,14 +17,67 @@
             <div class="story-block">
                 <div class="story-text">
                     <p class="section-eyebrow" th:text="#{about.s1.eyebrow}">Nuestros orígenes</p>
-                    <h2><span th:text="#{about.s1.title}">El origen de</span> <em th:text="#{about.s1.titleEm}">Fénix</em></h2>
-                    <p th:text="#{about.s1.p1}">Fénix Bakery nació hace más de 30 años...</p>
+                    <h2><span th:text="#{about.s1.title}">El origen de</span> <em th:text="#{about.s1.titleEm}">Fenix</em></h2>
+                    <p th:text="#{about.s1.p1}">Fenix Bakery nació hace más de 30 años...</p>
                     <p th:text="#{about.s1.p2}">Años después unos primos cubanos...</p>
                 </div>
                 <div class="story-visual">
-                    <div class="story-photo-wrap">
-                        <img src="/img/capitolio-habana.jpg" alt="Capitolio Nacional de Cuba, La Habana"/>
-                        <div class="story-photo-caption">La Habana, Cuba</div>
+                    <div class="story-photo-wrap origin-carousel-wrap">
+                        <div class="origin-carousel" id="originCarousel">
+                            <div class="origin-track" id="originTrack">
+                                <div class="origin-slide active" data-caption="Pinar del Río">
+                                    <img src="/img/origen/01-PRI.jpg" alt="Pinar del Río, Cuba"/>
+                                </div>
+                                <div class="origin-slide" data-caption="Artemisa">
+                                    <img src="/img/origen/02-ART.jpg" alt="Artemisa, Cuba"/>
+                                </div>
+                                <div class="origin-slide" data-caption="La Habana">
+                                    <img src="/img/origen/03-HAB.jpg" alt="La Habana, Cuba"/>
+                                </div>
+                                <div class="origin-slide" data-caption="Mayabeque">
+                                    <img src="/img/origen/04-MAY.jpg" alt="Mayabeque, Cuba"/>
+                                </div>
+                                <div class="origin-slide" data-caption="Matanzas">
+                                    <img src="/img/origen/05-MTZ.jpg" alt="Matanzas, Cuba"/>
+                                </div>
+                                <div class="origin-slide" data-caption="Villa Clara">
+                                    <img src="/img/origen/06-VCL.jpg" alt="Villa Clara, Cuba"/>
+                                </div>
+                                <div class="origin-slide" data-caption="Sancti Spíritus">
+                                    <img src="/img/origen/07-SSP.jpg" alt="Sancti Spíritus, Cuba"/>
+                                </div>
+                                <div class="origin-slide" data-caption="Cienfuegos">
+                                    <img src="/img/origen/08-CFG.jpg" alt="Cienfuegos, Cuba"/>
+                                </div>
+                                <div class="origin-slide" data-caption="Ciego de Ávila">
+                                    <img src="/img/origen/09-CAV.jpg" alt="Ciego de Ávila, Cuba"/>
+                                </div>
+                                <div class="origin-slide" data-caption="Camagüey">
+                                    <img src="/img/origen/10-CMG.jpg" alt="Camagüey, Cuba"/>
+                                </div>
+                                <div class="origin-slide" data-caption="Las Tunas">
+                                    <img src="/img/origen/11-LTU.jpg" alt="Las Tunas, Cuba"/>
+                                </div>
+                                <div class="origin-slide" data-caption="Holguín">
+                                    <img src="/img/origen/12-HLG.jpg" alt="Holguín, Cuba"/>
+                                </div>
+                                <div class="origin-slide" data-caption="Granma">
+                                    <img src="/img/origen/13-GRM.jpg" alt="Granma, Cuba"/>
+                                </div>
+                                <div class="origin-slide" data-caption="Santiago de Cuba">
+                                    <img src="/img/origen/14-SCU.jpg" alt="Santiago de Cuba, Cuba"/>
+                                </div>
+                                <div class="origin-slide" data-caption="Guantánamo">
+                                    <img src="/img/origen/15-GTM.jpg" alt="Guantánamo, Cuba"/>
+                                </div>
+                                <div class="origin-slide" data-caption="Isla de la Juventud">
+                                    <img src="/img/origen/16-IJV.jpg" alt="Isla de la Juventud, Cuba"/>
+                                </div>
+                            </div>
+                            <button class="origin-btn prev" onclick="originCarouselPrev()">&#8249;</button>
+                            <button class="origin-btn next" onclick="originCarouselNext()">&#8250;</button>
+                        </div>
+                        <div class="story-photo-caption" id="originCaption">Pinar del Río</div>
                     </div>
                 </div>
             </div>
@@ -32,13 +85,13 @@
             <div class="story-block reverse">
                 <div class="story-text">
                     <p class="section-eyebrow" th:text="#{about.s2.eyebrow}">Nuestra filosofía</p>
-                    <h2><span th:text="#{about.s2.title}">Como el ave</span> <em th:text="#{about.s2.titleEm}">Fénix</em></h2>
+                    <h2><span th:text="#{about.s2.title}">Como el ave</span> <em th:text="#{about.s2.titleEm}">Fenix</em></h2>
                     <p th:text="#{about.s2.p1}">El nombre no es casualidad...</p>
                     <p th:text="#{about.s2.p2}">Hoy somos un equipo de 25 personas...</p>
                 </div>
                 <div class="story-visual">
                     <div class="story-logo-wrap">
-                        <img src="/img/logo.png" alt="El Fénix Bakery" class="story-logo"/>
+                        <img src="/img/logo.png" alt="El Fenix Bakery" class="story-logo"/>
                         <div class="story-photo-caption">New Jersey</div>
                     </div>
                 </div>
@@ -47,8 +100,19 @@
             <div class="team-photo-section reveal">
                 <p class="section-eyebrow" th:text="#{about.team.eyebrow}">Quiénes somos</p>
                 <h2 class="section-title"><span th:text="#{about.team.title}">El</span> <em th:text="#{about.team.titleEm}">equipo</em></h2>
-                <div class="team-full-photo">
-                    <img src="/img/equipo-fenix.avif" alt="Equipo El Fénix Bakery"/>
+                <div class="team-full-photo team-carousel" id="teamCarousel">
+                    <div class="team-track" id="teamTrack">
+                        <div class="team-slide active" style="--bg-image:url('/img/equipo/equipo-01.jpeg')"><img src="/img/equipo/equipo-01.jpeg" alt="Equipo El Fenix Bakery"/></div>
+                        <div class="team-slide" style="--bg-image:url('/img/equipo/equipo-02.jpeg')"><img src="/img/equipo/equipo-02.jpeg" alt="Equipo El Fenix Bakery"/></div>
+                        <div class="team-slide" style="--bg-image:url('/img/equipo/equipo-03.jpeg')"><img src="/img/equipo/equipo-03.jpeg" alt="Equipo El Fenix Bakery"/></div>
+                        <div class="team-slide" style="--bg-image:url('/img/equipo/equipo-04.jpeg')"><img src="/img/equipo/equipo-04.jpeg" alt="Equipo El Fenix Bakery"/></div>
+                        <div class="team-slide" style="--bg-image:url('/img/equipo/equipo-05.jpeg')"><img src="/img/equipo/equipo-05.jpeg" alt="Equipo El Fenix Bakery"/></div>
+                        <div class="team-slide" style="--bg-image:url('/img/equipo/equipo-06.jpeg')"><img src="/img/equipo/equipo-06.jpeg" alt="Equipo El Fenix Bakery"/></div>
+                        <div class="team-slide" style="--bg-image:url('/img/equipo/equipo-07.jpg')"><img src="/img/equipo/equipo-07.jpg" alt="Equipo El Fenix Bakery"/></div>
+                    </div>
+                    <button class="team-btn prev" onclick="teamCarouselPrev()">&#8249;</button>
+                    <button class="team-btn next" onclick="teamCarouselNext()">&#8250;</button>
+                    <div class="team-dots" id="teamDots"></div>
                 </div>
             </div>
 

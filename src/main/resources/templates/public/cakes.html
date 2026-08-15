@@ -15,11 +15,20 @@
         <div class="section-container">
 
             <div class="menu-controls">
-                <div class="menu-filters">
+                <div class="menu-filters menu-filters-pills">
                     <button class="filter-btn active" data-cat="all" th:text="${#locale.language == 'en'} ? 'All' : 'Todo'">Todo</button>
                     <button class="filter-btn" data-cat="mini-cakes" th:text="${#locale.language == 'en'} ? 'Mini Cakes' : 'Mini Cakes'">Mini Cakes</button>
                     <button class="filter-btn" data-cat="cakes-de-la-casa" th:text="${#locale.language == 'en'} ? 'House Cakes' : 'Cakes de la Casa'">Cakes de la Casa</button>
                     <button class="filter-btn" data-cat="cakes-personalizados" th:text="${#locale.language == 'en'} ? 'Custom Cakes' : 'Cakes Personalizados'">Cakes Personalizados</button>
+                </div>
+                <div class="menu-filters menu-filters-select">
+                    <label class="menu-filter-label" th:text="${#locale.language == 'en'} ? 'Category' : 'Categoría'">Categoría</label>
+                    <select class="menu-cat-select" onchange="filterMenuAndSyncPills(this.value)">
+                        <option value="all" th:text="${#locale.language == 'en'} ? 'All' : 'Todo'">Todo</option>
+                        <option value="mini-cakes" th:text="${#locale.language == 'en'} ? 'Mini Cakes' : 'Mini Cakes'">Mini Cakes</option>
+                        <option value="cakes-de-la-casa" th:text="${#locale.language == 'en'} ? 'House Cakes' : 'Cakes de la Casa'">Cakes de la Casa</option>
+                        <option value="cakes-personalizados" th:text="${#locale.language == 'en'} ? 'Custom Cakes' : 'Cakes Personalizados'">Cakes Personalizados</option>
+                    </select>
                 </div>
             </div>
 

@@ -16,6 +16,8 @@
                 <a th:href="@{/menu}" class="btn btn-primary" th:text="#{hero.btn.menu}">Explorar menú</a>
                 <a th:href="@{/contacto}" class="btn btn-outline" th:text="#{hero.btn.order}">Hacer un pedido</a>
             </div>
+            <a th:href="@{/pdf/menu(locale=${#locale.language})}" download class="pdf-link-elegant hero-anim"
+               th:text="${#locale.language == 'en'} ? 'Download Menu (PDF)' : 'Descargar Menú (PDF)'">Descargar Menú (PDF)</a>
         </div>
         <div class="hero-divider"></div>
 
@@ -97,40 +99,14 @@
             <h2 class="section-title"><span th:text="#{featured.title}">Nuestras</span> <em th:text="#{featured.titleEm}">especialidades</em></h2>
             <p class="section-desc" th:text="#{featured.desc}">Cada pieza sale del horno con décadas de tradición cubana.</p>
             <div class="specialty-grid">
-                <a th:href="@{/menu/pan-cubano}" class="specialty-card reveal-item">
+                <a th:each="esp : ${especialidades}" th:href="@{${esp.url}}" class="specialty-card reveal-item">
                     <div class="specialty-img">
-                        <img src="/img/menu-pachy.jpg" alt="Pan Cubano"/>
+                        <img th:src="${esp.imagen}" th:alt="${esp.nombre}"
+                             onerror="this.onerror=null;this.src='/img/menu-placeholder.jpg';"/>
                     </div>
                     <div class="specialty-info">
-                        <h3 th:text="#{product.pan.name}">Pan Cubano</h3>
-                        <p th:text="#{product.pan.desc}">El clásico pan largo cubano.</p>
-                    </div>
-                </a>
-                <a th:href="@{/menu/flan}" class="specialty-card reveal-item">
-                    <div class="specialty-img">
-                        <img src="/img/menu-flan.jpg" alt="Flan"/>
-                    </div>
-                    <div class="specialty-info">
-                        <h3 th:text="#{product.flan.name}">Flan de Leche</h3>
-                        <p th:text="#{product.flan.desc}">Cremoso, suave y bañado en caramelo.</p>
-                    </div>
-                </a>
-                <a th:href="@{/menu/pastelito-guayaba}" class="specialty-card reveal-item">
-                    <div class="specialty-img">
-                        <img src="/img/menu-pastelito-guayaba.jpg" alt="Pastelito de Guayaba"/>
-                    </div>
-                    <div class="specialty-info">
-                        <h3 th:text="#{product.panuelos.name}">Pastel de Guayaba</h3>
-                        <p th:text="#{product.panuelos.desc}">Hojaldre con guayaba.</p>
-                    </div>
-                </a>
-                <a th:href="@{/menu/tres-leches}" class="specialty-card reveal-item">
-                    <div class="specialty-img">
-                        <img src="/img/tres-leches1.jpg" alt="Tres Leches"/>
-                    </div>
-                    <div class="specialty-info">
-                        <h3 th:text="#{product.treeleches.name}">Cake Tres Leches</h3>
-                        <p th:text="#{product.treeleches.desc}">Esponjoso, húmedo, bañado en tres leches.</p>
+                        <h3 th:text="${#locale.language == 'en' and esp.nombreEn != null and !esp.nombreEn.isEmpty()} ? ${esp.nombreEn} : ${esp.nombre}">Pan Cubano</h3>
+                        <p th:text="${#locale.language == 'en' and esp.descripcionEn != null and !esp.descripcionEn.isEmpty()} ? ${esp.descripcionEn} : ${esp.descripcion}">El clásico pan largo cubano.</p>
                     </div>
                 </a>
             </div>

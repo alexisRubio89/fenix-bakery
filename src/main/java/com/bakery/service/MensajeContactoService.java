@@ -16,8 +16,23 @@ public class MensajeContactoService {
     @Autowired
     private FiltroPalabrasService filtro;
 
-    // Guarda el mensaje aplicando el filtro de groserías al contenido de texto libre
+    @Autowired
+    private SpamDetectionService spamDetection;
+
+    // Guarda el mensaje aplicando el filtro de groserías y el filtro anti-spam.
+    // Si se detecta spam (texto sin sentido, email desechable o dominio listado
+    // en Spamhaus), lanza MensajeSpamException y NO se guarda nada.
     public MensajeContacto guardar(String nombre, String email, String telefono, String asunto, String mensaje) {
+        if (spamDetection.esTextoSinSentido(nombre, asunto, mensaje)) {
+            throw new MensajeSpamException("texto sin sentido");
+        }
+        if (spamDetection.esEmailDesechable(email)) {
+            throw new MensajeSpamException("email desechable");
+        }
+        if (spamDetection.estaEnListaSpamhaus(email)) {
+            throw new MensajeSpamException("dominio listado en Spamhaus");
+        }
+
         MensajeContacto m = new MensajeContacto(
             filtro.censurar(nombre),
             email,

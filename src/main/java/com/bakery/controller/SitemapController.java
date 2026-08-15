@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class SitemapController {
 
-    private static final String BASE = "https://www.fenixbakery.com";
+    private static final String BASE = "https://elfenixbakery.com";
 
     @Autowired private MenuService menuService;
     @Autowired private CakeService cakeService;

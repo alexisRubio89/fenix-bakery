@@ -9,6 +9,8 @@
         <p class="page-hero-eyebrow">Fenix Bakery</p>
         <h1 th:text="${#locale.language == 'en'} ? 'Our Menu' : 'Nuestro Menú'">Nuestro Menú</h1>
         <p th:text="${#locale.language == 'en'} ? 'Cuban bakery &amp; pastry — everything handmade daily' : 'Panadería y dulcería cubana — todo hecho a mano cada día'">Panadería y dulcería cubana</p>
+        <a th:href="@{/pdf/menu(locale=${#locale.language})}" download class="pdf-link-elegant"
+           th:text="${#locale.language == 'en'} ? 'Download Menu (PDF)' : 'Descargar Menú (PDF)'">Descargar Menú (PDF)</a>
     </section>
 
     <section class="section menu-bg">
@@ -21,7 +23,7 @@
                     <select id="catSelect" class="menu-cat-select" onchange="filterByCat(this.value)">
                         <option value="all" th:text="${#locale.language == 'en'} ? 'All categories' : 'Todas las categorías'">Todas</option>
                         <option value="sandwiches">Sandwiches</option>
-                        <option value="appetizer" th:text="${#locale.language == 'en'} ? 'Appetizers' : 'Aperitivos'">Aperitivos</option>
+                        <option value="aperitivo" th:text="${#locale.language == 'en'} ? 'Appetizers' : 'Aperitivos'">Aperitivos</option>
                         <option value="batidos" th:text="${#locale.language == 'en'} ? 'Shakes' : 'Batidos'">Batidos</option>
                         <option value="pasteles" th:text="${#locale.language == 'en'} ? 'Pastries' : 'Pasteles'">Pasteles</option>
                         <option value="postres-cubanos" th:text="${#locale.language == 'en'} ? 'Cuban Desserts' : 'Postres Cubanos'">Postres Cubanos</option>
@@ -69,6 +71,10 @@
                 <p th:text="#{menu.empty}">No hay productos en esta categoría.</p>
             </div>
 
+            <div class="menu-pdf-bottom">
+                <a th:href="@{/pdf/menu(locale=${#locale.language})}" download class="pdf-link-elegant"
+                   th:text="${#locale.language == 'en'} ? 'Download Menu (PDF)' : 'Descargar Menú (PDF)'">Descargar Menú (PDF)</a>
+            </div>
 
         </div>
     </section>
